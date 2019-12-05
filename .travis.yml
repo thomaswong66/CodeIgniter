@@ -15,13 +15,13 @@ php:
   - hhvm-3.30
   
 env:
-  - DB=mysql
-  - DB=mysqli
-  - DB=pgsql
-  - DB=sqlite
-  - DB=pdo/mysql
-  - DB=pdo/pgsql
-  - DB=pdo/sqlite
+  # - DB=mysql
+  # - DB=mysqli
+  # - DB=pgsql
+  # - DB=sqlite
+  # - DB=pdo/mysql
+  # - DB=pdo/pgsql
+  # - DB=pdo/sqlite
 
 sudo: false
 
@@ -30,10 +30,10 @@ before_script:
   - sh -c "if [ '$DB' = 'pgsql' ] || [ '$DB' = 'pdo/pgsql' ]; then psql -c 'DROP DATABASE IF EXISTS ci_test;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'pgsql' ] || [ '$DB' = 'pdo/pgsql' ]; then psql -c 'create database ci_test;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'mysql' ] || [ '$DB' = 'mysqli' ] || [ '$DB' = 'pdo/mysql' ]; then mysql -e 'create database IF NOT EXISTS ci_test;'; fi"
-
+  -make html
+  
 script: 
   -php -d zend.enable_gc=0 -d date.timezone=UTC -d mbstring.func_overload=7 -d mbstring.internal_encoding=UTF-8 vendor/bin/phpunit --coverage-text --configuration tests/travis/$DB.phpunit.xml
-  -make html
 
 matrix:
   allow_failures:
