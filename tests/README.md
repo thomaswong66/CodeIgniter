@@ -2,6 +2,8 @@
 
 Status : [![Build Status](https://secure.travis-ci.org/bcit-ci/CodeIgniter.png?branch=develop)](https://travis-ci.org/bcit-ci/CodeIgniter)
 
+[![Build Status](https://travis-ci.org/thomaswong66/CodeIgniter.svg?branch=develop)](https://travis-ci.org/thomaswong66/CodeIgniter)
+
 ### Introduction:
 
 This is the preliminary CodeIgniter testing documentation. It
