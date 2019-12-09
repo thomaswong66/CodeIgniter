@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Input Class &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="input-class">
+<h1>Input Class<a class="headerlink" href="#input-class" title="Permalink to this headline">¶</a></h1>
+<p>The Input Class provides some helper methods for accessing input data
+and pre-processing it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is initialized automatically by the system so there
+is no need to do it manually.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#accessing-input-data" id="id1">Accessing input data</a></p>
+<ul>
+<li><p><a class="reference internal" href="#using-post-get-cookie-or-server-data" id="id2">Using POST, GET, COOKIE, or SERVER Data</a></p></li>
+<li><p><a class="reference internal" href="#using-the-php-input-stream" id="id3">Using the php://input stream</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#class-reference" id="id4">Class Reference</a></p></li>
+</ul>
+</div>
+<div class="custom-index container"></div><div class="section" id="accessing-input-data">
+<h2><a class="toc-backref" href="#id1">Accessing input data</a><a class="headerlink" href="#accessing-input-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-post-get-cookie-or-server-data">
+<h3><a class="toc-backref" href="#id2">Using POST, GET, COOKIE, or SERVER Data</a><a class="headerlink" href="#using-post-get-cookie-or-server-data" title="Permalink to this headline">¶</a></h3>
+<p>CodeIgniter comes with helper methods that let you fetch POST, GET,
+COOKIE or SERVER items. The main advantage of using the provided
+methods rather than fetching an item directly (<code class="docutils literal notranslate"><span class="pre">$_POST['something']</span></code>)
+is that the methods will check to see if the item is set and return
+NULL if not. This lets you conveniently use data without
+having to test whether an item exists first. In other words, normally
+you might do something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$something = isset($_POST[&#39;something&#39;]) ? $_POST[&#39;something&#39;] : NULL;
+</pre></div>
+</div>
+<p>With CodeIgniter’s built in methods you can simply do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$something = $this-&gt;input-&gt;post(&#39;something&#39;);
+</pre></div>
+</div>
+<p>The main methods are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$this-&gt;input-&gt;post()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$this-&gt;input-&gt;get()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$this-&gt;input-&gt;cookie()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$this-&gt;input-&gt;server()</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="using-the-php-input-stream">
+<h3><a class="toc-backref" href="#id3">Using the php://input stream</a><a class="headerlink" href="#using-the-php-input-stream" title="Permalink to this headline">¶</a></h3>
+<p>If you want to utilize the PUT, DELETE, PATCH or other exotic request
+methods, they can only be accessed via a special input stream, that
+can only be read once. This isn’t as easy as just reading from e.g.
+the <code class="docutils literal notranslate"><span class="pre">$_POST</span></code> array, because it will always exist and you can try
+and access multiple variables without caring that you might only have
+one shot at all of the POST data.</p>
+<p>CodeIgniter will take care of that for you, and you can read the data
+from the <strong>php://input</strong> stream at any time, just by using the
+<code class="docutils literal notranslate"><span class="pre">$raw_input_stream</span></code> property:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;input-&gt;raw_input_stream;
+</pre></div>
+</div>
+<p>Additionally if the input stream is form-encoded like $_POST you can
+access its values by calling the
+<code class="docutils literal notranslate"><span class="pre">input_stream()</span></code> method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;input-&gt;input_stream(&#39;key&#39;);
+</pre></div>
+</div>
+<p>Similar to other methods such as <code class="docutils literal notranslate"><span class="pre">get()</span></code> and <code class="docutils literal notranslate"><span class="pre">post()</span></code>, if the
+requested data is not found, it will return NULL and you can also
+decide whether to run the data through <code class="docutils literal notranslate"><span class="pre">xss_clean()</span></code> by passing
+a boolean value as the second parameter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;input-&gt;input_stream(&#39;key&#39;, TRUE); // XSS Clean
+$this-&gt;input-&gt;input_stream(&#39;key&#39;, FALSE); // No XSS filter
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can utilize <code class="docutils literal notranslate"><span class="pre">method()</span></code> in order to know if you’re reading
+PUT, DELETE or PATCH data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="class-reference">
+<h2><a class="toc-backref" href="#id4">Class Reference</a><a class="headerlink" href="#class-reference" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Input Class</a><ul>
+<li><a class="reference internal" href="#accessing-input-data">Accessing input data</a><ul>
+<li><a class="reference internal" href="#using-post-get-cookie-or-server-data">Using POST, GET, COOKIE, or SERVER Data</a></li>
+<li><a class="reference internal" href="#using-the-php-input-stream">Using the php://input stream</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-reference">Class Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/libraries/input.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

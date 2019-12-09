@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Controllers &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="controllers">
+<h1><a class="toc-backref" href="#id1">Controllers</a><a class="headerlink" href="#controllers" title="Permalink to this headline">¶</a></h1>
+<p>Controllers are the heart of your application, as they determine how
+HTTP requests should be handled.</p>
+<div class="contents topic" id="page-contents">
+<p class="topic-title first">Page Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#controllers" id="id1">Controllers</a></p>
+<ul>
+<li><p><a class="reference internal" href="#what-is-a-controller" id="id2">What is a Controller?</a></p></li>
+<li><p><a class="reference internal" href="#let-s-try-it-hello-world" id="id3">Let’s try it: Hello World!</a></p></li>
+<li><p><a class="reference internal" href="#methods" id="id4">Methods</a></p></li>
+<li><p><a class="reference internal" href="#passing-uri-segments-to-your-methods" id="id5">Passing URI Segments to your methods</a></p></li>
+<li><p><a class="reference internal" href="#defining-a-default-controller" id="id6">Defining a Default Controller</a></p></li>
+<li><p><a class="reference internal" href="#remapping-method-calls" id="id7">Remapping Method Calls</a></p></li>
+<li><p><a class="reference internal" href="#processing-output" id="id8">Processing Output</a></p></li>
+<li><p><a class="reference internal" href="#private-methods" id="id9">Private methods</a></p></li>
+<li><p><a class="reference internal" href="#organizing-your-controllers-into-sub-directories" id="id10">Organizing Your Controllers into Sub-directories</a></p></li>
+<li><p><a class="reference internal" href="#class-constructors" id="id11">Class Constructors</a></p></li>
+<li><p><a class="reference internal" href="#reserved-method-names" id="id12">Reserved method names</a></p></li>
+<li><p><a class="reference internal" href="#that-s-it" id="id13">That’s it!</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="what-is-a-controller">
+<h2><a class="toc-backref" href="#id2">What is a Controller?</a><a class="headerlink" href="#what-is-a-controller" title="Permalink to this headline">¶</a></h2>
+<p><strong>A Controller is simply a class file that is named in a way that can be
+associated with a URI.</strong></p>
+<p>Consider this URI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>In the above example, CodeIgniter would attempt to find a controller
+named Blog.php and load it.</p>
+<p><strong>When a controller’s name matches the first segment of a URI, it will
+be loaded.</strong></p>
+</div>
+<div class="section" id="let-s-try-it-hello-world">
+<h2><a class="toc-backref" href="#id3">Let’s try it: Hello World!</a><a class="headerlink" href="#let-s-try-it-hello-world" title="Permalink to this headline">¶</a></h2>
+<p>Let’s create a simple controller so you can see it in action. Using your
+text editor, create a file called Blog.php, and put the following code
+in it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+class Blog extends CI_Controller {
+
+        public function index()
+        {
+                echo &#39;Hello World!&#39;;
+        }
+}
+</pre></div>
+</div>
+<p>Then save the file to your <em>application/controllers/</em> directory.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The file must be called ‘Blog.php’, with a capital ‘B’.</p>
+</div>
+<p>Now visit the your site using a URL similar to this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>If you did it right, you should see:</p>
+<blockquote>
+<div><p>Hello World!</p>
+</div></blockquote>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Class names must start with an uppercase letter.</p>
+</div>
+<p>This is valid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+class Blog extends CI_Controller {
+
+}
+</pre></div>
+</div>
+<p>This is <strong>not</strong> valid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+class blog extends CI_Controller {
+
+}
+</pre></div>
+</div>
+<p>Also, always make sure your controller extends the parent controller
+class so that it can inherit all its methods.</p>
+</div>
+<div class="section" id="methods">
+<h2><a class="toc-backref" href="#id4">Methods</a><a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<p>In the above example the method name is <code class="docutils literal notranslate"><span class="pre">index()</span></code>. The “index” method
+is always loaded by default if the <strong>second segment</strong> of the URI is
+empty. Another way to show your “Hello World” message would be this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">index</span><span class="o">/</span>
+</pre></div>
+</div>
+<p><strong>The second segment of the URI determines which method in the
+controller gets called.</strong></p>
+<p>Let’s try it. Add a new method to your controller:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+class Blog extends CI_Controller {
+
+        public function index()
+        {
+                echo &#39;Hello World!&#39;;
+        }
+
+        public function comments()
+        {
+                echo &#39;Look at this!&#39;;
+        }
+}
+</pre></div>
+</div>
+<p>Now load the following URL to see the comment method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">comments</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>You should see your new message.</p>
+</div>
+<div class="section" id="passing-uri-segments-to-your-methods">
+<h2><a class="toc-backref" href="#id5">Passing URI Segments to your methods</a><a class="headerlink" href="#passing-uri-segments-to-your-methods" title="Permalink to this headline">¶</a></h2>
+<p>If your URI contains more than two segments they will be passed to your
+method as parameters.</p>
+<p>For example, let’s say you have a URI like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="o">/</span><span class="n">products</span><span class="o">/</span><span class="n">shoes</span><span class="o">/</span><span class="n">sandals</span><span class="o">/</span><span class="mi">123</span>
+</pre></div>
+</div>
+<p>Your method will be passed URI segments 3 and 4 (“sandals” and “123”):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+class Products extends CI_Controller {
+
+        public function shoes($sandals, $id)
+        {
+                echo $sandals;
+                echo $id;
+        }
+}
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If you are using the <a class="reference internal" href="routing.html"><span class="doc">URI Routing</span></a>
+feature, the segments passed to your method will be the re-routed
+ones.</p>
+</div>
+</div>
+<div class="section" id="defining-a-default-controller">
+<h2><a class="toc-backref" href="#id6">Defining a Default Controller</a><a class="headerlink" href="#defining-a-default-controller" title="Permalink to this headline">¶</a></h2>
+<p>CodeIgniter can be told to load a default controller when a URI is not
+present, as will be the case when only your site root URL is requested.
+To specify a default controller, open your <strong>application/config/routes.php</strong>
+file and set this variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$route[&#39;default_controller&#39;] = &#39;blog&#39;;
+</pre></div>
+</div>
+<p>Where ‘blog’ is the name of the controller class you want used. If you now
+load your main index.php file without specifying any URI segments you’ll
+see your “Hello World” message by default.</p>
+<p>For more information, please refer to the “Reserved Routes” section of the
+<a class="reference internal" href="routing.html"><span class="doc">URI Routing</span></a> documentation.</p>
+</div>
+<div class="section" id="remapping-method-calls">
+<h2><a class="toc-backref" href="#id7">Remapping Method Calls</a><a class="headerlink" href="#remapping-method-calls" title="Permalink to this headline">¶</a></h2>
+<p>As noted above, the second segment of the URI typically determines which
+method in the controller gets called. CodeIgniter permits you to override
+this behavior through the use of the <code class="docutils literal notranslate"><span class="pre">_remap()</span></code> method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">function</span> <span class="n">_remap</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="o">//</span> <span class="n">Some</span> <span class="n">code</span> <span class="n">here</span><span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If your controller contains a method named _remap(),
+it will <strong>always</strong> get called regardless of what your URI contains. It
+overrides the normal behavior in which the URI determines which method
+is called, allowing you to define your own method routing rules.</p>
+</div>
+<p>The overridden method call (typically the second segment of the URI) will
+be passed as a parameter to the <code class="docutils literal notranslate"><span class="pre">_remap()</span></code> method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function _remap($method)
+{
+        if ($method === &#39;some_method&#39;)
+        {
+                $this-&gt;$method();
+        }
+        else
+        {
+                $this-&gt;default_method();
+        }
+}
+</pre></div>
+</div>
+<p>Any extra segments after the method name are passed into <code class="docutils literal notranslate"><span class="pre">_remap()</span></code> as an
+optional second parameter. This array can be used in combination with
+PHP’s <a class="reference external" href="https://secure.php.net/call_user_func_array">call_user_func_array()</a>
+to emulate CodeIgniter’s default behavior.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function _remap($method, $params = array())
+{
+        $method = &#39;process_&#39;.$method;
+        if (method_exists($this, $method))
+        {
+                return call_user_func_array(array($this, $method), $params);
+        }
+        show_404();
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="processing-output">
+<h2><a class="toc-backref" href="#id8">Processing Output</a><a class="headerlink" href="#processing-output" title="Permalink to this headline">¶</a></h2>
+<p>CodeIgniter has an output class that takes care of sending your final
+rendered data to the web browser automatically. More information on this
+can be found in the <a class="reference internal" href="views.html"><span class="doc">Views</span></a> and <a class="reference internal" href="../libraries/output.html"><span class="doc">Output Class</span></a> pages. In some cases, however, you might want to
+post-process the finalized data in some way and send it to the browser
+yourself. CodeIgniter permits you to add a method named <code class="docutils literal notranslate"><span class="pre">_output()</span></code>
+to your controller that will receive the finalized output data.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If your controller contains a method named <code class="docutils literal notranslate"><span class="pre">_output()</span></code>,
+it will <strong>always</strong> be called by the output class instead of
+echoing the finalized data directly. The first parameter of the
+method will contain the finalized output.</p>
+</div>
+<p>Here is an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function _output($output)
+{
+        echo $output;
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that your <code class="docutils literal notranslate"><span class="pre">_output()</span></code> method will receive the
+data in its finalized state. Benchmark and memory usage data
+will be rendered, cache files written (if you have caching
+enabled), and headers will be sent (if you use that
+<a class="reference internal" href="../libraries/output.html"><span class="doc">feature</span></a>) before it is handed off
+to the <code class="docutils literal notranslate"><span class="pre">_output()</span></code> method.
+To have your controller’s output cached properly, its
+<code class="docutils literal notranslate"><span class="pre">_output()</span></code> method can use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>if ($this-&gt;output-&gt;cache_expiration &gt; 0)
+{
+        $this-&gt;output-&gt;_write_cache($output);
+}
+</pre></div>
+</div>
+<p>If you are using this feature the page execution timer and
+memory usage stats might not be perfectly accurate since they
+will not take into account any further processing you do.
+For an alternate way to control output <em>before</em> any of the
+final processing is done, please see the available methods
+in the <a class="reference internal" href="../libraries/output.html"><span class="doc">Output Library</span></a>.</p>
+</div>
+</div>
+<div class="section" id="private-methods">
+<h2><a class="toc-backref" href="#id9">Private methods</a><a class="headerlink" href="#private-methods" title="Permalink to this headline">¶</a></h2>
+<p>In some cases you may want certain methods hidden from public access.
+In order to achieve this, simply declare the method as being private
+or protected and it will not be served via a URL request. For example,
+if you were to have a method like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">private</span> <span class="n">function</span> <span class="n">_utility</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="o">//</span> <span class="n">some</span> <span class="n">code</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Trying to access it via the URL, like this, will not work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">_utility</span><span class="o">/</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prefixing method names with an underscore will also prevent
+them from being called. This is a legacy feature that is left
+for backwards-compatibility.</p>
+</div>
+</div>
+<div class="section" id="organizing-your-controllers-into-sub-directories">
+<h2><a class="toc-backref" href="#id10">Organizing Your Controllers into Sub-directories</a><a class="headerlink" href="#organizing-your-controllers-into-sub-directories" title="Permalink to this headline">¶</a></h2>
+<p>If you are building a large application you might want to hierarchically
+organize or structure your controllers into sub-directories. CodeIgniter
+permits you to do this.</p>
+<p>Simply create sub-directories under the main <em>application/controllers/</em>
+one and place your controller classes within them.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using this feature the first segment of your URI must
+specify the folder. For example, let’s say you have a controller located
+here:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">application</span><span class="o">/</span><span class="n">controllers</span><span class="o">/</span><span class="n">products</span><span class="o">/</span><span class="n">Shoes</span><span class="o">.</span><span class="n">php</span>
+</pre></div>
+</div>
+<p>To call the above controller your URI will look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="o">/</span><span class="n">products</span><span class="o">/</span><span class="n">shoes</span><span class="o">/</span><span class="n">show</span><span class="o">/</span><span class="mi">123</span>
+</pre></div>
+</div>
+</div>
+<p>Each of your sub-directories may contain a default controller which will be
+called if the URL contains <em>only</em> the sub-directory. Simply put a controller
+in there that matches the name of your ‘default_controller’ as specified in
+your <em>application/config/routes.php</em> file.</p>
+<p>CodeIgniter also permits you to remap your URIs using its <a class="reference internal" href="routing.html"><span class="doc">URI
+Routing</span></a> feature.</p>
+</div>
+<div class="section" id="class-constructors">
+<h2><a class="toc-backref" href="#id11">Class Constructors</a><a class="headerlink" href="#class-constructors" title="Permalink to this headline">¶</a></h2>
+<p>If you intend to use a constructor in any of your Controllers, you
+<strong>MUST</strong> place the following line of code in it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">parent</span><span class="p">::</span><span class="n">__construct</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The reason this line is necessary is because your local constructor will
+be overriding the one in the parent controller class so we need to
+manually call it.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+class Blog extends CI_Controller {
+
+        public function __construct()
+        {
+                parent::__construct();
+                // Your own constructor code
+        }
+}
+</pre></div>
+</div>
+<p>Constructors are useful if you need to set some default values, or run a
+default process when your class is instantiated. Constructors can’t
+return a value, but they can do some default work.</p>
+</div>
+<div class="section" id="reserved-method-names">
+<h2><a class="toc-backref" href="#id12">Reserved method names</a><a class="headerlink" href="#reserved-method-names" title="Permalink to this headline">¶</a></h2>
+<p>Since your controller classes will extend the main application
+controller you must be careful not to name your methods identically to
+the ones used by that class, otherwise your local functions will
+override them. See <a class="reference internal" href="reserved_names.html"><span class="doc">Reserved Names</span></a> for a full
+list.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>You should also never have a method named identically
+to its class name. If you do, and there is no <code class="docutils literal notranslate"><span class="pre">__construct()</span></code>
+method in the same class, then your e.g. <code class="docutils literal notranslate"><span class="pre">Index::index()</span></code>
+method will be executed as a class constructor! This is a PHP4
+backwards-compatibility feature.</p>
+</div>
+</div>
+<div class="section" id="that-s-it">
+<h2><a class="toc-backref" href="#id13">That’s it!</a><a class="headerlink" href="#that-s-it" title="Permalink to this headline">¶</a></h2>
+<p>That, in a nutshell, is all there is to know about controllers.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Controllers</a><ul>
+<li><a class="reference internal" href="#what-is-a-controller">What is a Controller?</a></li>
+<li><a class="reference internal" href="#let-s-try-it-hello-world">Let’s try it: Hello World!</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#passing-uri-segments-to-your-methods">Passing URI Segments to your methods</a></li>
+<li><a class="reference internal" href="#defining-a-default-controller">Defining a Default Controller</a></li>
+<li><a class="reference internal" href="#remapping-method-calls">Remapping Method Calls</a></li>
+<li><a class="reference internal" href="#processing-output">Processing Output</a></li>
+<li><a class="reference internal" href="#private-methods">Private methods</a></li>
+<li><a class="reference internal" href="#organizing-your-controllers-into-sub-directories">Organizing Your Controllers into Sub-directories</a></li>
+<li><a class="reference internal" href="#class-constructors">Class Constructors</a></li>
+<li><a class="reference internal" href="#reserved-method-names">Reserved method names</a></li>
+<li><a class="reference internal" href="#that-s-it">That’s it!</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/general/controllers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

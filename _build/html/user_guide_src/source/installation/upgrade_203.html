@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Upgrading from 2.0.2 to 2.0.3 &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="upgrading-from-2-0-2-to-2-0-3">
+<h1>Upgrading from 2.0.2 to 2.0.3<a class="headerlink" href="#upgrading-from-2-0-2-to-2-0-3" title="Permalink to this headline">¶</a></h1>
+<p>Before performing an update you should take your site offline by
+replacing the index.php file with a static one.</p>
+<div class="section" id="step-1-update-your-codeigniter-files">
+<h2>Step 1: Update your CodeIgniter files<a class="headerlink" href="#step-1-update-your-codeigniter-files" title="Permalink to this headline">¶</a></h2>
+<p>Replace all files and directories in your “system” folder and replace
+your index.php file. If any modifications were made to your index.php
+they will need to be made fresh in this new one.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have any custom developed files in these folders please
+make copies of them first.</p>
+</div>
+</div>
+<div class="section" id="step-2-update-your-main-index-php-file">
+<h2>Step 2: Update your main index.php file<a class="headerlink" href="#step-2-update-your-main-index-php-file" title="Permalink to this headline">¶</a></h2>
+<p>If you are running a stock index.php file simply replace your version
+with the new one.</p>
+<p>If your index.php file has internal modifications, please add your
+modifications to the new file and use it.</p>
+</div>
+<div class="section" id="step-3-replace-config-user-agents-php">
+<h2>Step 3: Replace config/user_agents.php<a class="headerlink" href="#step-3-replace-config-user-agents-php" title="Permalink to this headline">¶</a></h2>
+<p>This config file has been updated to contain more user agent types,
+please copy it to application/config/user_agents.php.</p>
+</div>
+<div class="section" id="step-4-change-references-of-the-ext-constant-to-php">
+<h2>Step 4: Change references of the EXT constant to “.php”<a class="headerlink" href="#step-4-change-references-of-the-ext-constant-to-php" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The EXT Constant has been marked as deprecated, but has not
+been removed from the application. You are encouraged to make the
+changes sooner rather than later.</p>
+</div>
+</div>
+<div class="section" id="step-5-remove-apppath-third-party-from-autoload-php">
+<h2>Step 5: Remove APPPATH.’third_party’ from autoload.php<a class="headerlink" href="#step-5-remove-apppath-third-party-from-autoload-php" title="Permalink to this headline">¶</a></h2>
+<p>Open application/config/autoload.php, and look for the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$autoload[&#39;packages&#39;] = array(APPPATH.&#39;third_party&#39;);
+</pre></div>
+</div>
+<p>If you have not chosen to load any additional packages, that line can be
+changed to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$autoload[&#39;packages&#39;] = array();
+</pre></div>
+</div>
+<p>Which should provide for nominal performance gains if not autoloading
+packages.</p>
+</div>
+<div class="section" id="update-sessions-database-tables">
+<h2>Update Sessions Database Tables<a class="headerlink" href="#update-sessions-database-tables" title="Permalink to this headline">¶</a></h2>
+<p>If you are using database sessions with the CI Session Library, please
+update your ci_sessions database table as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CREATE</span> <span class="n">INDEX</span> <span class="n">last_activity_idx</span> <span class="n">ON</span> <span class="n">ci_sessions</span><span class="p">(</span><span class="n">last_activity</span><span class="p">);</span>
+<span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">ci_sessions</span> <span class="n">MODIFY</span> <span class="n">user_agent</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">120</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Upgrading from 2.0.2 to 2.0.3</a><ul>
+<li><a class="reference internal" href="#step-1-update-your-codeigniter-files">Step 1: Update your CodeIgniter files</a></li>
+<li><a class="reference internal" href="#step-2-update-your-main-index-php-file">Step 2: Update your main index.php file</a></li>
+<li><a class="reference internal" href="#step-3-replace-config-user-agents-php">Step 3: Replace config/user_agents.php</a></li>
+<li><a class="reference internal" href="#step-4-change-references-of-the-ext-constant-to-php">Step 4: Change references of the EXT constant to “.php”</a></li>
+<li><a class="reference internal" href="#step-5-remove-apppath-third-party-from-autoload-php">Step 5: Remove APPPATH.’third_party’ from autoload.php</a></li>
+<li><a class="reference internal" href="#update-sessions-database-tables">Update Sessions Database Tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/installation/upgrade_203.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

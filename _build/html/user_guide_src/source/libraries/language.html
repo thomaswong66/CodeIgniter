@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Language Class &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="language-class">
+<h1>Language Class<a class="headerlink" href="#language-class" title="Permalink to this headline">¶</a></h1>
+<p>The Language Class provides functions to retrieve language files and
+lines of text for purposes of internationalization.</p>
+<p>In your CodeIgniter <strong>system</strong> folder, you will find a <strong>language</strong> sub-directory
+containing a set of language files for the <strong>english</strong> idiom.
+The files in this directory (<strong>system/language/english/</strong>) define the regular messages,
+error messages, and other generally output terms or expressions, for the different parts
+of the CodeIgniter framework.</p>
+<p>You can create or incorporate your own language files, as needed, in order to provide
+application-specific error and other messages, or to provide translations of the core
+messages into other languages. These translations or additional messages would go inside
+your <strong>application/language/</strong> directory, with separate sub-directories for each idiom
+(for instance, ‘french’ or ‘german’).</p>
+<p>The CodeIgniter framework comes with a set of language files for the “english” idiom.
+Additional approved translations for different idioms may be found in the
+<a class="reference external" href="https://github.com/bcit-ci/codeigniter3-translations">CodeIgniter 3 Translations repositories</a>.
+Each repository deals with a single idiom.</p>
+<p>When CodeIgniter loads language files, it will load the one in <strong>system/language/</strong>
+first and will then look for an override in your <strong>application/language/</strong> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each language should be stored in its own folder. For example,
+the English files are located at: system/language/english</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#handling-multiple-languages" id="id3">Handling Multiple Languages</a></p>
+<ul>
+<li><p><a class="reference internal" href="#sample-language-files" id="id4">Sample Language Files</a></p></li>
+<li><p><a class="reference internal" href="#example-of-switching-languages" id="id5">Example of switching languages</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#internationalization" id="id6">Internationalization</a></p></li>
+<li><p><a class="reference internal" href="#using-the-language-class" id="id7">Using the Language Class</a></p>
+<ul>
+<li><p><a class="reference internal" href="#creating-language-files" id="id8">Creating Language Files</a></p></li>
+<li><p><a class="reference internal" href="#loading-a-language-file" id="id9">Loading A Language File</a></p></li>
+<li><p><a class="reference internal" href="#fetching-a-line-of-text" id="id10">Fetching a Line of Text</a></p>
+<ul>
+<li><p><a class="reference internal" href="#using-language-lines-as-form-labels" id="id11">Using language lines as form labels</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#auto-loading-languages" id="id12">Auto-loading Languages</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#class-reference" id="id13">Class Reference</a></p></li>
+</ul>
+</div>
+<div class="custom-index container"></div><div class="section" id="handling-multiple-languages">
+<h2><a class="toc-backref" href="#id3">Handling Multiple Languages</a><a class="headerlink" href="#handling-multiple-languages" title="Permalink to this headline">¶</a></h2>
+<p>If you want to support multiple languages in your application, you would provide folders inside
+your <strong>application/language/</strong> directory for each of them, and you would specify the default
+language in your <strong>application/config/config.php</strong>.</p>
+<p>The <strong>application/language/english/</strong> directory would contain any additional language files
+needed by your application, for instance for error messages.</p>
+<p>Each of the other idiom-specific directories would contain the core language files that you
+obtained from the translations repositories, or that you translated yourself, as well as
+any additional ones needed by your application.</p>
+<p>You would store the language you are currently using, for instance in a session variable.</p>
+<div class="section" id="sample-language-files">
+<h3><a class="toc-backref" href="#id4">Sample Language Files</a><a class="headerlink" href="#sample-language-files" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">system</span><span class="o">/</span>
+        <span class="n">language</span><span class="o">/</span>
+                <span class="n">english</span><span class="o">/</span>
+                        <span class="o">...</span>
+                        <span class="n">email_lang</span><span class="o">.</span><span class="n">php</span>
+                        <span class="n">form_validation_lang</span><span class="o">.</span><span class="n">php</span>
+                        <span class="o">...</span>
+
+<span class="n">application</span><span class="o">/</span>
+        <span class="n">language</span><span class="o">/</span>
+                <span class="n">english</span><span class="o">/</span>
+                        <span class="n">error_messages_lang</span><span class="o">.</span><span class="n">php</span>
+                <span class="n">french</span><span class="o">/</span>
+                        <span class="o">...</span>
+                        <span class="n">email_lang</span><span class="o">.</span><span class="n">php</span>
+                        <span class="n">error_messages_lang</span><span class="o">.</span><span class="n">php</span>
+                        <span class="n">form_validation_lang</span><span class="o">.</span><span class="n">php</span>
+                        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-of-switching-languages">
+<h3><a class="toc-backref" href="#id5">Example of switching languages</a><a class="headerlink" href="#example-of-switching-languages" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$idiom = $this-&gt;session-&gt;get_userdata(&#39;language&#39;);
+$this-&gt;lang-&gt;load(&#39;error_messages&#39;, $idiom);
+$oops = $this-&gt;lang-&gt;line(&#39;message_key&#39;);
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="internationalization">
+<h2><a class="toc-backref" href="#id6">Internationalization</a><a class="headerlink" href="#internationalization" title="Permalink to this headline">¶</a></h2>
+<p>The Language class in CodeIgniter is meant to provide an easy and lightweight
+way to support multiplelanguages in your application. It is not meant to be a
+full implementation of what is commonly called <a class="reference external" href="https://en.wikipedia.org/wiki/Internationalization_and_localization">internationalization and localization</a>.</p>
+<p>We use the term “idiom” to refer to a language using its common name,
+rather than using any of the international standards, such as “en”, “en-US”,
+or “en-CA-x-ca” for English and some of its variants.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is nothing to prevent you from using those abbreviations in your application!</p>
+</div>
+</div>
+<div class="section" id="using-the-language-class">
+<h2><a class="toc-backref" href="#id7">Using the Language Class</a><a class="headerlink" href="#using-the-language-class" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-language-files">
+<h3><a class="toc-backref" href="#id8">Creating Language Files</a><a class="headerlink" href="#creating-language-files" title="Permalink to this headline">¶</a></h3>
+<p>Language files must be named with <strong>_lang.php</strong> as the filename extension.
+For example, let’s say you want to create a file containing error messages.
+You might name it: error_lang.php</p>
+<p>Within the file you will assign each line of text to an array called
+<code class="docutils literal notranslate"><span class="pre">$lang</span></code> with this prototype:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$lang[&#39;language_key&#39;] = &#39;The actual message to be shown&#39;;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s a good practice to use a common prefix for all messages
+in a given file to avoid collisions with similarly named items in other
+files. For example, if you are creating error messages you might prefix
+them with error_</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$lang[&#39;error_email_missing&#39;] = &#39;You must submit an email address&#39;;
+$lang[&#39;error_url_missing&#39;] = &#39;You must submit a URL&#39;;
+$lang[&#39;error_username_missing&#39;] = &#39;You must submit a username&#39;;
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-a-language-file">
+<h3><a class="toc-backref" href="#id9">Loading A Language File</a><a class="headerlink" href="#loading-a-language-file" title="Permalink to this headline">¶</a></h3>
+<p>In order to fetch a line from a particular file you must load the file
+first. Loading a language file is done with the following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;lang-&gt;load(&#39;filename&#39;, &#39;language&#39;);
+</pre></div>
+</div>
+<p>Where filename is the name of the file you wish to load (without the
+file extension), and language is the language set containing it (ie,
+english). If the second parameter is missing, the default language set
+in your <strong>application/config/config.php</strong> file will be used.</p>
+<p>You can also load multiple language files at the same time by passing an array of language files as first parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;lang-&gt;load(array(&#39;filename1&#39;, &#39;filename2&#39;));
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <em>language</em> parameter can only consist of letters.</p>
+</div>
+</div>
+<div class="section" id="fetching-a-line-of-text">
+<h3><a class="toc-backref" href="#id10">Fetching a Line of Text</a><a class="headerlink" href="#fetching-a-line-of-text" title="Permalink to this headline">¶</a></h3>
+<p>Once your desired language file is loaded you can access any line of
+text using this function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;lang-&gt;line(&#39;language_key&#39;);
+</pre></div>
+</div>
+<p>Where <em>language_key</em> is the array key corresponding to the line you wish
+to show.</p>
+<p>You can optionally pass FALSE as the second argument of that method to
+disable error logging, in case you’re not sure if the line exists:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;lang-&gt;line(&#39;misc_key&#39;, FALSE);
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method simply returns the line. It does not echo it.</p>
+</div>
+<div class="section" id="using-language-lines-as-form-labels">
+<h4><a class="toc-backref" href="#id11">Using language lines as form labels</a><a class="headerlink" href="#using-language-lines-as-form-labels" title="Permalink to this headline">¶</a></h4>
+<p>This feature has been deprecated from the language library and moved to
+the <a href="#id1"><span class="problematic" id="id2">:php:func:`lang()`</span></a> function of the <a class="reference internal" href="../helpers/language_helper.html"><span class="doc">Language Helper</span></a>.</p>
+</div>
+</div>
+<div class="section" id="auto-loading-languages">
+<h3><a class="toc-backref" href="#id12">Auto-loading Languages</a><a class="headerlink" href="#auto-loading-languages" title="Permalink to this headline">¶</a></h3>
+<p>If you find that you need a particular language globally throughout your
+application, you can tell CodeIgniter to <a class="reference internal" href="../general/autoloader.html"><span class="doc">auto-load</span></a> it during system initialization. This is done
+by opening the <strong>application/config/autoload.php</strong> file and adding the
+language(s) to the autoload array.</p>
+</div>
+</div>
+<div class="section" id="class-reference">
+<h2><a class="toc-backref" href="#id13">Class Reference</a><a class="headerlink" href="#class-reference" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Language Class</a><ul>
+<li><a class="reference internal" href="#handling-multiple-languages">Handling Multiple Languages</a><ul>
+<li><a class="reference internal" href="#sample-language-files">Sample Language Files</a></li>
+<li><a class="reference internal" href="#example-of-switching-languages">Example of switching languages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#internationalization">Internationalization</a></li>
+<li><a class="reference internal" href="#using-the-language-class">Using the Language Class</a><ul>
+<li><a class="reference internal" href="#creating-language-files">Creating Language Files</a></li>
+<li><a class="reference internal" href="#loading-a-language-file">Loading A Language File</a></li>
+<li><a class="reference internal" href="#fetching-a-line-of-text">Fetching a Line of Text</a><ul>
+<li><a class="reference internal" href="#using-language-lines-as-form-labels">Using language lines as form labels</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#auto-loading-languages">Auto-loading Languages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-reference">Class Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/libraries/language.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Installation Instructions &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation-instructions">
+<h1>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
+<p>CodeIgniter is installed in four steps:</p>
+<ol class="arabic simple">
+<li><p>Unzip the package.</p></li>
+<li><p>Upload the CodeIgniter folders and files to your server. Normally the
+<em>index.php</em> file will be at your root.</p></li>
+<li><p>Open the <em>application/config/config.php</em> file with a text editor and
+set your base URL. If you intend to use encryption or sessions, set
+your encryption key.</p></li>
+<li><p>If you intend to use a database, open the
+<em>application/config/database.php</em> file with a text editor and set your
+database settings.</p></li>
+</ol>
+<p>If you wish to increase security by hiding the location of your
+CodeIgniter files you can rename the system and application folders to
+something more private. If you do rename them, you must open your main
+<em>index.php</em> file and set the <code class="docutils literal notranslate"><span class="pre">$system_path</span></code> and <code class="docutils literal notranslate"><span class="pre">$application_folder</span></code>
+variables at the top of the file with the new name you’ve chosen.</p>
+<p>For the best security, both the system and any application folders
+should be placed above web root so that they are not directly accessible
+via a browser. By default, <em>.htaccess</em> files are included in each folder
+to help prevent direct access, but it is best to remove them from public
+access entirely in case the web server configuration changes or doesn’t
+abide by the <em>.htaccess</em>.</p>
+<p>If you would like to keep your views public it is also possible to move
+the views folder out of your application folder.</p>
+<p>After moving them, open your main index.php file and set the
+<code class="docutils literal notranslate"><span class="pre">$system_path</span></code>, <code class="docutils literal notranslate"><span class="pre">$application_folder</span></code> and <code class="docutils literal notranslate"><span class="pre">$view_folder</span></code> variables,
+preferably with a full path, e.g. ‘<em>/www/MyUser/system</em>’.</p>
+<p>One additional measure to take in production environments is to disable
+PHP error reporting and any other development-only functionality. In
+CodeIgniter, this can be done by setting the <code class="docutils literal notranslate"><span class="pre">ENVIRONMENT</span></code> constant, which
+is more fully described on the <a class="reference internal" href="../general/security.html"><span class="doc">security
+page</span></a>.</p>
+<p>That’s it!</p>
+<p>If you’re new to CodeIgniter, please read the <a class="reference internal" href="../overview/getting_started.html"><span class="doc">Getting
+Started</span></a> section of the User Guide
+to begin learning how to build dynamic PHP applications. Enjoy!</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/installation/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

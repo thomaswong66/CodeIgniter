@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Database Configuration &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="database-configuration">
+<h1>Database Configuration<a class="headerlink" href="#database-configuration" title="Permalink to this headline">¶</a></h1>
+<p>CodeIgniter has a config file that lets you store your database
+connection values (username, password, database name, etc.). The config
+file is located at application/config/database.php. You can also set
+database connection values for specific
+<a class="reference internal" href="../libraries/config.html"><span class="doc">environments</span></a> by placing <strong>database.php</strong>
+in the respective environment config folder.</p>
+<p>The config settings are stored in a multi-dimensional array with this
+prototype:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$db[&#39;default&#39;] = array(
+        &#39;dsn&#39;   =&gt; &#39;&#39;,
+        &#39;hostname&#39; =&gt; &#39;localhost&#39;,
+        &#39;username&#39; =&gt; &#39;root&#39;,
+        &#39;password&#39; =&gt; &#39;&#39;,
+        &#39;database&#39; =&gt; &#39;database_name&#39;,
+        &#39;dbdriver&#39; =&gt; &#39;mysqli&#39;,
+        &#39;dbprefix&#39; =&gt; &#39;&#39;,
+        &#39;pconnect&#39; =&gt; TRUE,
+        &#39;db_debug&#39; =&gt; TRUE,
+        &#39;cache_on&#39; =&gt; FALSE,
+        &#39;cachedir&#39; =&gt; &#39;&#39;,
+        &#39;char_set&#39; =&gt; &#39;utf8&#39;,
+        &#39;dbcollat&#39; =&gt; &#39;utf8_general_ci&#39;,
+        &#39;swap_pre&#39; =&gt; &#39;&#39;,
+        &#39;encrypt&#39; =&gt; FALSE,
+        &#39;compress&#39; =&gt; FALSE,
+        &#39;stricton&#39; =&gt; FALSE,
+        &#39;failover&#39; =&gt; array()
+);
+</pre></div>
+</div>
+<p>Some database drivers (such as PDO, PostgreSQL, Oracle, ODBC) might
+require a full DSN string to be provided. If that is the case, you
+should use the ‘dsn’ configuration setting, as if you’re using the
+driver’s underlying native PHP extension, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// PDO
+$db[&#39;default&#39;][&#39;dsn&#39;] = &#39;pgsql:host=localhost;port=5432;dbname=database_name&#39;;
+
+// Oracle
+$db[&#39;default&#39;][&#39;dsn&#39;] = &#39;//localhost/XE&#39;;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you do not specify a DSN string for a driver that requires it, CodeIgniter
+will try to build it with the rest of the provided settings.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you provide a DSN string and it is missing some valid settings (e.g. the
+database character set), which are present in the rest of the configuration
+fields, CodeIgniter will append them.</p>
+</div>
+<p>You can also specify failovers for the situation when the main connection cannot connect for some reason.
+These failovers can be specified by setting the failover for a connection like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$db[&#39;default&#39;][&#39;failover&#39;] = array(
+                array(
+                        &#39;hostname&#39; =&gt; &#39;localhost1&#39;,
+                        &#39;username&#39; =&gt; &#39;&#39;,
+                        &#39;password&#39; =&gt; &#39;&#39;,
+                        &#39;database&#39; =&gt; &#39;&#39;,
+                        &#39;dbdriver&#39; =&gt; &#39;mysqli&#39;,
+                        &#39;dbprefix&#39; =&gt; &#39;&#39;,
+                        &#39;pconnect&#39; =&gt; TRUE,
+                        &#39;db_debug&#39; =&gt; TRUE,
+                        &#39;cache_on&#39; =&gt; FALSE,
+                        &#39;cachedir&#39; =&gt; &#39;&#39;,
+                        &#39;char_set&#39; =&gt; &#39;utf8&#39;,
+                        &#39;dbcollat&#39; =&gt; &#39;utf8_general_ci&#39;,
+                        &#39;swap_pre&#39; =&gt; &#39;&#39;,
+                        &#39;encrypt&#39; =&gt; FALSE,
+                        &#39;compress&#39; =&gt; FALSE,
+                        &#39;stricton&#39; =&gt; FALSE
+                ),
+                array(
+                        &#39;hostname&#39; =&gt; &#39;localhost2&#39;,
+                        &#39;username&#39; =&gt; &#39;&#39;,
+                        &#39;password&#39; =&gt; &#39;&#39;,
+                        &#39;database&#39; =&gt; &#39;&#39;,
+                        &#39;dbdriver&#39; =&gt; &#39;mysqli&#39;,
+                        &#39;dbprefix&#39; =&gt; &#39;&#39;,
+                        &#39;pconnect&#39; =&gt; TRUE,
+                        &#39;db_debug&#39; =&gt; TRUE,
+                        &#39;cache_on&#39; =&gt; FALSE,
+                        &#39;cachedir&#39; =&gt; &#39;&#39;,
+                        &#39;char_set&#39; =&gt; &#39;utf8&#39;,
+                        &#39;dbcollat&#39; =&gt; &#39;utf8_general_ci&#39;,
+                        &#39;swap_pre&#39; =&gt; &#39;&#39;,
+                        &#39;encrypt&#39; =&gt; FALSE,
+                        &#39;compress&#39; =&gt; FALSE,
+                        &#39;stricton&#39; =&gt; FALSE
+                )
+        );
+</pre></div>
+</div>
+<p>You can specify as many failovers as you like.</p>
+<p>The reason we use a multi-dimensional array rather than a more simple
+one is to permit you to optionally store multiple sets of connection
+values. If, for example, you run multiple environments (development,
+production, test, etc.) under a single installation, you can set up a
+connection group for each, then switch between groups as needed. For
+example, to set up a “test” environment you would do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$db[&#39;test&#39;] = array(
+        &#39;dsn&#39;   =&gt; &#39;&#39;,
+        &#39;hostname&#39; =&gt; &#39;localhost&#39;,
+        &#39;username&#39; =&gt; &#39;root&#39;,
+        &#39;password&#39; =&gt; &#39;&#39;,
+        &#39;database&#39; =&gt; &#39;database_name&#39;,
+        &#39;dbdriver&#39; =&gt; &#39;mysqli&#39;,
+        &#39;dbprefix&#39; =&gt; &#39;&#39;,
+        &#39;pconnect&#39; =&gt; TRUE,
+        &#39;db_debug&#39; =&gt; TRUE,
+        &#39;cache_on&#39; =&gt; FALSE,
+        &#39;cachedir&#39; =&gt; &#39;&#39;,
+        &#39;char_set&#39; =&gt; &#39;utf8&#39;,
+        &#39;dbcollat&#39; =&gt; &#39;utf8_general_ci&#39;,
+        &#39;swap_pre&#39; =&gt; &#39;&#39;,
+        &#39;compress&#39; =&gt; FALSE,
+        &#39;encrypt&#39; =&gt; FALSE,
+        &#39;stricton&#39; =&gt; FALSE,
+        &#39;failover&#39; =&gt; array()
+);
+</pre></div>
+</div>
+<p>Then, to globally tell the system to use that group you would set this
+variable located in the config file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$active_group = &#39;test&#39;;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name ‘test’ is arbitrary. It can be anything you want. By
+default we’ve used the word “default” for the primary connection,
+but it too can be renamed to something more relevant to your project.</p>
+</div>
+<div class="section" id="query-builder">
+<h2>Query Builder<a class="headerlink" href="#query-builder" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="query_builder.html"><span class="doc">Query Builder Class</span></a> is globally enabled or
+disabled by setting the $query_builder variable in the database
+configuration file to TRUE/FALSE (boolean). The default setting is TRUE.
+If you are not using the
+query builder class, setting it to FALSE will utilize fewer resources
+when the database classes are initialized.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$query_builder = TRUE;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>that some CodeIgniter classes such as Sessions require Query
+Builder to be enabled to access certain functionality.</p>
+</div>
+</div>
+<div class="section" id="explanation-of-values">
+<h2>Explanation of Values:<a class="headerlink" href="#explanation-of-values" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name Config</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>dsn</strong></p></td>
+<td><p>The DSN connect string (an all-in-one configuration sequence).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>hostname</strong></p></td>
+<td><p>The hostname of your database server. Often this is ‘localhost’.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>username</strong></p></td>
+<td><p>The username used to connect to the database.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>password</strong></p></td>
+<td><p>The password used to connect to the database.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>database</strong></p></td>
+<td><p>The name of the database you want to connect to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>dbdriver</strong></p></td>
+<td><p>The database type. ie: mysqli, postgre, odbc, etc. Must be specified in lower case.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>dbprefix</strong></p></td>
+<td><p>An optional table prefix which will added to the table name when running
+<a class="reference internal" href="query_builder.html"><span class="doc">Query Builder</span></a> queries. This permits multiple CodeIgniter
+installations to share one database.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>pconnect</strong></p></td>
+<td><p>TRUE/FALSE (boolean) - Whether to use a persistent connection.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>db_debug</strong></p></td>
+<td><p>TRUE/FALSE (boolean) - Whether database errors should be displayed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>cache_on</strong></p></td>
+<td><p>TRUE/FALSE (boolean) - Whether database query caching is enabled,
+see also <a class="reference internal" href="caching.html"><span class="doc">Database Caching Class</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>cachedir</strong></p></td>
+<td><p>The absolute server path to your database query cache directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>char_set</strong></p></td>
+<td><p>The character set used in communicating with the database.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>dbcollat</strong></p></td>
+<td><p>The character collation used in communicating with the database</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only used in the ‘mysql’ and ‘mysqli’ drivers.</p>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><strong>swap_pre</strong></p></td>
+<td><p>A default table prefix that should be swapped with dbprefix. This is useful for distributed
+applications where you might run manually written queries, and need the prefix to still be
+customizable by the end user.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>schema</strong></p></td>
+<td><p>The database schema, defaults to ‘public’. Used by PostgreSQL and ODBC drivers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>encrypt</strong></p></td>
+<td><p>Whether or not to use an encrypted connection.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘mysql’ (deprecated), ‘sqlsrv’ and ‘pdo/sqlsrv’ drivers accept TRUE/FALSE</p></li>
+<li><p>‘mysqli’ and ‘pdo/mysql’ drivers accept an array with the following options:</p>
+<ul>
+<li><p>‘ssl_key’    - Path to the private key file</p></li>
+<li><p>‘ssl_cert’   - Path to the public key certificate file</p></li>
+<li><p>‘ssl_ca’     - Path to the certificate authority file</p></li>
+<li><p>‘ssl_capath’ - Path to a directory containing trusted CA certificates in PEM format</p></li>
+<li><p>‘ssl_cipher’ - List of <em>allowed</em> ciphers to be used for the encryption, separated by colons (‘:’)</p></li>
+<li><p>‘ssl_verify’ - TRUE/FALSE; Whether to verify the server certificate or not (‘mysqli’ only)</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><p><strong>compress</strong></p></td>
+<td><p>Whether or not to use client compression (MySQL only).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>stricton</strong></p></td>
+<td><p>TRUE/FALSE (boolean) - Whether to force “Strict Mode” connections, good for ensuring strict SQL
+while developing an application.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>port</strong></p></td>
+<td><p>The database port number. To use this value you have to add a line to the database config array.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$db[&#39;default&#39;][&#39;port&#39;] = 5432;
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on what database platform you are using (MySQL, PostgreSQL,
+etc.) not all values will be needed. For example, when using SQLite you
+will not need to supply a username or password, and the database name
+will be the path to your database file. The information above assumes
+you are using MySQL.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Database Configuration</a><ul>
+<li><a class="reference internal" href="#query-builder">Query Builder</a></li>
+<li><a class="reference internal" href="#explanation-of-values">Explanation of Values:</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/database/configuration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

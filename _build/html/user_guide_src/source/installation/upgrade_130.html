@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Upgrading from 1.2 to 1.3 &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="upgrading-from-1-2-to-1-3">
+<h1>Upgrading from 1.2 to 1.3<a class="headerlink" href="#upgrading-from-1-2-to-1-3" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The instructions on this page assume you are running version
+1.2. If you have not upgraded to that version please do so first.</p>
+</div>
+<p>Before performing an update you should take your site offline by
+replacing the index.php file with a static one.</p>
+<div class="section" id="step-1-update-your-codeigniter-files">
+<h2>Step 1: Update your CodeIgniter files<a class="headerlink" href="#step-1-update-your-codeigniter-files" title="Permalink to this headline">¶</a></h2>
+<p>Replace the following directories in your “system” folder with the new
+versions:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have any custom developed files in these folders please
+make copies of them first.</p>
+</div>
+<ul class="simple">
+<li><p>application/<strong>models</strong>/ (new for 1.3)</p></li>
+<li><p>codeigniter (new for 1.3)</p></li>
+<li><p>drivers</p></li>
+<li><p>helpers</p></li>
+<li><p>init</p></li>
+<li><p>language</p></li>
+<li><p>libraries</p></li>
+<li><p>plugins</p></li>
+<li><p>scaffolding</p></li>
+</ul>
+</div>
+<div class="section" id="step-2-update-your-error-files">
+<h2>Step 2: Update your error files<a class="headerlink" href="#step-2-update-your-error-files" title="Permalink to this headline">¶</a></h2>
+<p>Version 1.3 contains two new error templates located in
+application/errors, and for naming consistency the other error templates
+have been renamed.</p>
+<p>If you <strong>have not</strong> customized any of the error templates simply replace
+this folder:</p>
+<ul class="simple">
+<li><p>application/errors/</p></li>
+</ul>
+<p>If you <strong>have</strong> customized your error templates, rename them as follows:</p>
+<ul class="simple">
+<li><p>404.php = error_404.php</p></li>
+<li><p>error.php = error_general.php</p></li>
+<li><p>error_db.php (new)</p></li>
+<li><p>error_php.php (new)</p></li>
+</ul>
+</div>
+<div class="section" id="step-3-update-your-index-php-file">
+<h2>Step 3: Update your index.php file<a class="headerlink" href="#step-3-update-your-index-php-file" title="Permalink to this headline">¶</a></h2>
+<p>Please open your main index.php file (located at your root). At the very
+bottom of the file, change this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">require_once</span> <span class="n">BASEPATH</span><span class="o">.</span><span class="s1">&#39;libraries/Front_controller&#39;</span><span class="o">.</span><span class="n">EXT</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>To this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">require_once</span> <span class="n">BASEPATH</span><span class="o">.</span><span class="s1">&#39;codeigniter/CodeIgniter&#39;</span><span class="o">.</span><span class="n">EXT</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-update-your-config-php-file">
+<h2>Step 4: Update your config.php file<a class="headerlink" href="#step-4-update-your-config-php-file" title="Permalink to this headline">¶</a></h2>
+<p>Open your application/config/config.php file and add these new items:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/*
+|------------------------------------------------
+| URL suffix
+|------------------------------------------------
+|
+| This option allows you to add a suffix to all URLs.
+| For example, if a URL is this:
+|
+| example.com/index.php/products/view/shoes
+|
+| You can optionally add a suffix, like &quot;.html&quot;,
+| making the page appear to be of a certain type:
+|
+| example.com/index.php/products/view/shoes.html
+|
+*/
+$config[&#39;url_suffix&#39;] = &quot;&quot;;
+
+
+/*
+|------------------------------------------------
+| Enable Query Strings
+|------------------------------------------------
+|
+| By default CodeIgniter uses search-engine and
+| human-friendly segment based URLs:
+|
+| example.com/who/what/where/
+|
+| You can optionally enable standard query string
+| based URLs:
+|
+| example.com?who=me&amp;what=something&amp;where=here
+|
+| Options are: TRUE or FALSE (boolean)
+|
+| The two other items let you set the query string &quot;words&quot;
+| that will invoke your controllers and functions:
+| example.com/index.php?c=controller&amp;m=function
+|
+*/
+$config[&#39;enable_query_strings&#39;] = FALSE;
+$config[&#39;controller_trigger&#39;] = &#39;c&#39;;
+$config[&#39;function_trigger&#39;] = &#39;m&#39;;
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-5-update-your-database-php-file">
+<h2>Step 5: Update your database.php file<a class="headerlink" href="#step-5-update-your-database-php-file" title="Permalink to this headline">¶</a></h2>
+<p>Open your application/config/database.php file and add these new items:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$db[&#39;default&#39;][&#39;dbprefix&#39;] = &quot;&quot;;
+$db[&#39;default&#39;][&#39;active_r&#39;] = TRUE;
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-6-update-your-user-guide">
+<h2>Step 6: Update your user guide<a class="headerlink" href="#step-6-update-your-user-guide" title="Permalink to this headline">¶</a></h2>
+<p>Please also replace your local copy of the user guide with the new
+version.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Upgrading from 1.2 to 1.3</a><ul>
+<li><a class="reference internal" href="#step-1-update-your-codeigniter-files">Step 1: Update your CodeIgniter files</a></li>
+<li><a class="reference internal" href="#step-2-update-your-error-files">Step 2: Update your error files</a></li>
+<li><a class="reference internal" href="#step-3-update-your-index-php-file">Step 3: Update your index.php file</a></li>
+<li><a class="reference internal" href="#step-4-update-your-config-php-file">Step 4: Update your config.php file</a></li>
+<li><a class="reference internal" href="#step-5-update-your-database-php-file">Step 5: Update your database.php file</a></li>
+<li><a class="reference internal" href="#step-6-update-your-user-guide">Step 6: Update your user guide</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/installation/upgrade_130.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

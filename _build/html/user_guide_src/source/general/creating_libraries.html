@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Creating Libraries &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="creating-libraries">
+<h1>Creating Libraries<a class="headerlink" href="#creating-libraries" title="Permalink to this headline">¶</a></h1>
+<p>When we use the term “Libraries” we are normally referring to the
+classes that are located in the libraries directory and described in the
+Class Reference of this user guide. In this case, however, we will
+instead describe how you can create your own libraries within your
+application/libraries directory in order to maintain separation between
+your local resources and the global framework resources.</p>
+<p>As an added bonus, CodeIgniter permits your libraries to extend native
+classes if you simply need to add some functionality to an existing
+library. Or you can even replace native libraries just by placing
+identically named versions in your <em>application/libraries</em> directory.</p>
+<p>In summary:</p>
+<ul class="simple">
+<li><p>You can create entirely new libraries.</p></li>
+<li><p>You can extend native libraries.</p></li>
+<li><p>You can replace native libraries.</p></li>
+</ul>
+<p>The page below explains these three concepts in detail.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Database classes can not be extended or replaced with your
+own classes. All other classes are able to be replaced/extended.</p>
+</div>
+<div class="section" id="storage">
+<h2>Storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h2>
+<p>Your library classes should be placed within your <em>application/libraries</em>
+directory, as this is where CodeIgniter will look for them when they are
+initialized.</p>
+</div>
+<div class="section" id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>File names must be capitalized. For example: Myclass.php</p></li>
+<li><p>Class declarations must be capitalized. For example: class Myclass</p></li>
+<li><p>Class names and file names must match.</p></li>
+</ul>
+</div>
+<div class="section" id="the-class-file">
+<h2>The Class File<a class="headerlink" href="#the-class-file" title="Permalink to this headline">¶</a></h2>
+<p>Classes should have this basic prototype:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+defined(&#39;BASEPATH&#39;) OR exit(&#39;No direct script access allowed&#39;);
+
+class Someclass {
+
+        public function some_method()
+        {
+        }
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We are using the name Someclass purely as an example.</p>
+</div>
+</div>
+<div class="section" id="using-your-class">
+<h2>Using Your Class<a class="headerlink" href="#using-your-class" title="Permalink to this headline">¶</a></h2>
+<p>From within any of your <a class="reference internal" href="controllers.html"><span class="doc">Controller</span></a> methods you
+can initialize your class using the standard:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;library(&#39;someclass&#39;);
+</pre></div>
+</div>
+<p>Where <em>someclass</em> is the file name, without the “.php” file extension.
+You can submit the file name capitalized or lower case. CodeIgniter
+doesn’t care.</p>
+<p>Once loaded you can access your class using the lower case version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;someclass-&gt;some_method();  // Object instances will always be lower case
+</pre></div>
+</div>
+</div>
+<div class="section" id="passing-parameters-when-initializing-your-class">
+<h2>Passing Parameters When Initializing Your Class<a class="headerlink" href="#passing-parameters-when-initializing-your-class" title="Permalink to this headline">¶</a></h2>
+<p>In the library loading method you can dynamically pass data as an
+array via the second parameter and it will be passed to your class
+constructor:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$params = array(&#39;type&#39; =&gt; &#39;large&#39;, &#39;color&#39; =&gt; &#39;red&#39;);
+
+$this-&gt;load-&gt;library(&#39;someclass&#39;, $params);
+</pre></div>
+</div>
+<p>If you use this feature you must set up your class constructor to expect
+data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php defined(&#39;BASEPATH&#39;) OR exit(&#39;No direct script access allowed&#39;);
+
+class Someclass {
+
+        public function __construct($params)
+        {
+                // Do something with $params
+        }
+}
+</pre></div>
+</div>
+<p>You can also pass parameters stored in a config file. Simply create a
+config file named identically to the class file name and store it in
+your <em>application/config/</em> directory. Note that if you dynamically pass
+parameters as described above, the config file option will not be
+available.</p>
+</div>
+<div class="section" id="utilizing-codeigniter-resources-within-your-library">
+<h2>Utilizing CodeIgniter Resources within Your Library<a class="headerlink" href="#utilizing-codeigniter-resources-within-your-library" title="Permalink to this headline">¶</a></h2>
+<p>To access CodeIgniter’s native resources within your library use the
+<code class="docutils literal notranslate"><span class="pre">get_instance()</span></code> method. This method returns the CodeIgniter super
+object.</p>
+<p>Normally from within your controller methods you will call any of the
+available CodeIgniter methods using the <code class="docutils literal notranslate"><span class="pre">$this</span></code> construct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;helper(&#39;url&#39;);
+$this-&gt;load-&gt;library(&#39;session&#39;);
+$this-&gt;config-&gt;item(&#39;base_url&#39;);
+// etc.
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">$this</span></code>, however, only works directly within your controllers, your
+models, or your views. If you would like to use CodeIgniter’s classes
+from within your own custom classes you can do so as follows:</p>
+<p>First, assign the CodeIgniter object to a variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$CI =&amp; get_instance();
+</pre></div>
+</div>
+<p>Once you’ve assigned the object to a variable, you’ll use that variable
+<em>instead</em> of <code class="docutils literal notranslate"><span class="pre">$this</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$CI =&amp; get_instance();
+
+$CI-&gt;load-&gt;helper(&#39;url&#39;);
+$CI-&gt;load-&gt;library(&#39;session&#39;);
+$CI-&gt;config-&gt;item(&#39;base_url&#39;);
+// etc.
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You’ll notice that the above <code class="docutils literal notranslate"><span class="pre">get_instance()</span></code> function is being
+passed by reference:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$CI =&amp; get_instance();
+</pre></div>
+</div>
+<p>This is very important. Assigning by reference allows you to use the
+original CodeIgniter object rather than creating a copy of it.</p>
+</div>
+<p>However, since a library is a class, it would be better if you
+take full advantage of the OOP principles. So, in order to
+be able to use the CodeIgniter super-object in all of the class
+methods, you’re encouraged to assign it to a property instead:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>class Example_library {
+
+        protected $CI;
+
+        // We&#39;ll use a constructor, as you can&#39;t directly call a function
+        // from a property definition.
+        public function __construct()
+        {
+                // Assign the CodeIgniter super-object
+                $this-&gt;CI =&amp; get_instance();
+        }
+
+        public function foo()
+        {
+                $this-&gt;CI-&gt;load-&gt;helper(&#39;url&#39;);
+                redirect();
+        }
+
+        public function bar()
+        {
+                echo $this-&gt;CI-&gt;config-&gt;item(&#39;base_url&#39;);
+        }
+
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="replacing-native-libraries-with-your-versions">
+<h2>Replacing Native Libraries with Your Versions<a class="headerlink" href="#replacing-native-libraries-with-your-versions" title="Permalink to this headline">¶</a></h2>
+<p>Simply by naming your class files identically to a native library will
+cause CodeIgniter to use it instead of the native one. To use this
+feature you must name the file and the class declaration exactly the
+same as the native library. For example, to replace the native Email
+library you’ll create a file named <em>application/libraries/Email.php</em>,
+and declare your class with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CI_Email</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that most native classes are prefixed with CI_.</p>
+<p>To load your library you’ll see the standard loading method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;library(&#39;email&#39;);
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At this time the Database classes can not be replaced with
+your own versions.</p>
+</div>
+</div>
+<div class="section" id="extending-native-libraries">
+<h2>Extending Native Libraries<a class="headerlink" href="#extending-native-libraries" title="Permalink to this headline">¶</a></h2>
+<p>If all you need to do is add some functionality to an existing library -
+perhaps add a method or two - then it’s overkill to replace the entire
+library with your version. In this case it’s better to simply extend the
+class. Extending a class is nearly identical to replacing a class with a
+couple exceptions:</p>
+<ul class="simple">
+<li><p>The class declaration must extend the parent class.</p></li>
+<li><p>Your new class name and filename must be prefixed with MY_ (this
+item is configurable. See below.).</p></li>
+</ul>
+<p>For example, to extend the native Email class you’ll create a file named
+<em>application/libraries/MY_Email.php</em>, and declare your class with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MY_Email</span> <span class="n">extends</span> <span class="n">CI_Email</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you need to use a constructor in your class make sure you
+extend the parent constructor:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>class MY_Email extends CI_Email {
+
+        public function __construct($config = array())
+        {
+                parent::__construct($config);
+                // Your own constructor code
+        }
+
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not all of the libraries have the same (or any) parameters
+in their constructor. Take a look at the library that you’re
+extending first to see how it should be implemented.</p>
+</div>
+<div class="section" id="loading-your-sub-class">
+<h3>Loading Your Sub-class<a class="headerlink" href="#loading-your-sub-class" title="Permalink to this headline">¶</a></h3>
+<p>To load your sub-class you’ll use the standard syntax normally used. DO
+NOT include your prefix. For example, to load the example above, which
+extends the Email class, you will use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;library(&#39;email&#39;);
+</pre></div>
+</div>
+<p>Once loaded you will use the class variable as you normally would for
+the class you are extending. In the case of the email class all calls
+will use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;email-&gt;some_method();
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-your-own-prefix">
+<h3>Setting Your Own Prefix<a class="headerlink" href="#setting-your-own-prefix" title="Permalink to this headline">¶</a></h3>
+<p>To set your own sub-class prefix, open your
+<em>application/config/config.php</em> file and look for this item:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$config[&#39;subclass_prefix&#39;] = &#39;MY_&#39;;
+</pre></div>
+</div>
+<p>Please note that all native CodeIgniter libraries are prefixed with CI_
+so DO NOT use that as your prefix.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creating Libraries</a><ul>
+<li><a class="reference internal" href="#storage">Storage</a></li>
+<li><a class="reference internal" href="#naming-conventions">Naming Conventions</a></li>
+<li><a class="reference internal" href="#the-class-file">The Class File</a></li>
+<li><a class="reference internal" href="#using-your-class">Using Your Class</a></li>
+<li><a class="reference internal" href="#passing-parameters-when-initializing-your-class">Passing Parameters When Initializing Your Class</a></li>
+<li><a class="reference internal" href="#utilizing-codeigniter-resources-within-your-library">Utilizing CodeIgniter Resources within Your Library</a></li>
+<li><a class="reference internal" href="#replacing-native-libraries-with-your-versions">Replacing Native Libraries with Your Versions</a></li>
+<li><a class="reference internal" href="#extending-native-libraries">Extending Native Libraries</a><ul>
+<li><a class="reference internal" href="#loading-your-sub-class">Loading Your Sub-class</a></li>
+<li><a class="reference internal" href="#setting-your-own-prefix">Setting Your Own Prefix</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/general/creating_libraries.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

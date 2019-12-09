@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Using CodeIgniter Drivers &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="using-codeigniter-drivers">
+<h1>Using CodeIgniter Drivers<a class="headerlink" href="#using-codeigniter-drivers" title="Permalink to this headline">¶</a></h1>
+<p>Drivers are a special type of Library that has a parent class and any
+number of potential child classes. Child classes have access to the
+parent class, but not their siblings. Drivers provide an elegant syntax
+in your <a class="reference internal" href="controllers.html"><span class="doc">controllers</span></a> for libraries that benefit
+from or require being broken down into discrete classes.</p>
+<p>Drivers are found in the <em>system/libraries/</em> directory, in their own
+sub-directory which is identically named to the parent library class.
+Also inside that directory is a subdirectory named drivers, which
+contains all of the possible child class files.</p>
+<p>To use a driver you will initialize it within a controller using the
+following initialization method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;driver(&#39;class_name&#39;);
+</pre></div>
+</div>
+<p>Where class name is the name of the driver class you want to invoke. For
+example, to load a driver named “Some_parent” you would do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;driver(&#39;some_parent&#39;);
+</pre></div>
+</div>
+<p>Methods of that class can then be invoked with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;some_parent-&gt;some_method();
+</pre></div>
+</div>
+<p>The child classes, the drivers themselves, can then be called directly
+through the parent class, without initializing them:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;some_parent-&gt;child_one-&gt;some_method();
+$this-&gt;some_parent-&gt;child_two-&gt;another_method();
+</pre></div>
+</div>
+<div class="section" id="creating-your-own-drivers">
+<h2>Creating Your Own Drivers<a class="headerlink" href="#creating-your-own-drivers" title="Permalink to this headline">¶</a></h2>
+<p>Please read the section of the user guide that discusses how to <a class="reference internal" href="creating_drivers.html"><span class="doc">create
+your own drivers</span></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using CodeIgniter Drivers</a><ul>
+<li><a class="reference internal" href="#creating-your-own-drivers">Creating Your Own Drivers</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/general/drivers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

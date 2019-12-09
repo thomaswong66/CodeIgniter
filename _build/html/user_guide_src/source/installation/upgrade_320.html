@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Upgrading from 3.1.x to 3.2.x &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="upgrading-from-3-1-x-to-3-2-x">
+<h1>Upgrading from 3.1.x to 3.2.x<a class="headerlink" href="#upgrading-from-3-1-x-to-3-2-x" title="Permalink to this headline">¶</a></h1>
+<p>Before performing an update you should take your site offline by
+replacing the index.php file with a static one.</p>
+<div class="section" id="step-1-update-your-codeigniter-files">
+<h2>Step 1: Update your CodeIgniter files<a class="headerlink" href="#step-1-update-your-codeigniter-files" title="Permalink to this headline">¶</a></h2>
+<p>Replace all files and directories in your <em>system/</em> directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have any custom developed files in these directories,
+please make copies of them first.</p>
+</div>
+</div>
+<div class="section" id="step-2-check-your-php-version">
+<h2>Step 2: Check your PHP version<a class="headerlink" href="#step-2-check-your-php-version" title="Permalink to this headline">¶</a></h2>
+<p>We recommend always running versions that are <a class="reference external" href="https://secure.php.net/supported-versions.php">currently supported</a>, which right now is at least PHP 5.6.</p>
+<p>PHP 5.3.x versions are now officially not supported by CodeIgniter, and while 5.4.8+
+may be at least runnable, we strongly discourage you from using any PHP versions below
+the ones listed on the <a class="reference external" href="https://secure.php.net/supported-versions.php">PHP.net Supported Versions</a>
+page.</p>
+</div>
+<div class="section" id="step-3-remove-calls-to-ci-model-construct">
+<h2>Step 3: Remove calls to <code class="docutils literal notranslate"><span class="pre">CI_Model::__construct()</span></code><a class="headerlink" href="#step-3-remove-calls-to-ci-model-construct" title="Permalink to this headline">¶</a></h2>
+<p>The class constructor for <code class="docutils literal notranslate"><span class="pre">CI_Model</span></code> never contained vital code or useful
+logic, only a single line to log a message. A change in CodeIgniter 3.1.7
+moved this log message elsewhere and that naturally made the constructor
+completely unnecessary. However, it was left in place to avoid immedate BC
+breaks in a minor release.</p>
+<p>In version 3.2.0, that constructor is entirely removed, which would result
+in fatal errors on attempts to call it. Particularly in code like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Some_model</span> <span class="n">extends</span> <span class="n">CI_Model</span> <span class="p">{</span>
+
+        <span class="n">public</span> <span class="n">function</span> <span class="n">__construct</span><span class="p">()</span>
+        <span class="p">{</span>
+                <span class="n">parent</span><span class="p">::</span><span class="n">__construct</span><span class="p">();</span> <span class="o">//</span> <span class="n">calls</span> <span class="n">CI_Model</span><span class="p">::</span><span class="n">__construct</span><span class="p">()</span>
+
+                <span class="n">do_some_other_thing</span><span class="p">();</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>All you need to do is remove that <code class="docutils literal notranslate"><span class="pre">parent::__construct()</span></code> call. On a side
+note, the following seems to be a very common practice:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Some_class</span> <span class="n">extends</span> <span class="n">CI_Something</span> <span class="p">{</span>
+
+        <span class="n">public</span> <span class="n">function</span> <span class="n">__construct</span><span class="p">()</span>
+        <span class="p">{</span>
+                <span class="n">parent</span><span class="p">::</span><span class="n">__construct</span><span class="p">();</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Please, do NOT do this! It’s pointless; it serves no purpose and doesn’t do
+anything. If a parent class has a <code class="docutils literal notranslate"><span class="pre">__construct()</span></code> method, it will be
+inherited by all its child classes and will execute just fine - you DON’T
+have to explicitly call it unless you want to extend its logic.</p>
+</div>
+<div class="section" id="step-4-change-database-connection-handling">
+<h2>Step 4: Change database connection handling<a class="headerlink" href="#step-4-change-database-connection-handling" title="Permalink to this headline">¶</a></h2>
+<p>“Loading” a database, whether by using the <em>config/autoload.php</em> settings
+or manually via calling <code class="docutils literal notranslate"><span class="pre">$this-&gt;load-&gt;database()</span></code> or the less-known
+<code class="docutils literal notranslate"><span class="pre">DB()</span></code> function, will now throw a <code class="docutils literal notranslate"><span class="pre">RuntimeException</span></code> in case of a
+failure.</p>
+<p>In addition, being unable to set the configured character set is now also
+considered a connection failure.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This has been the case for most database drivers in the in the
+past as well (i.e. all but the ‘mysql’, ‘mysqli’ and ‘postgre’
+drivers).</p>
+</div>
+<p>What this means is that if you’re unable to connect to a database, or
+have an erroneous character set configured, CodeIgniter will no longer
+fail silently, but will throw an exception instead.</p>
+<p>You may choose to explicitly catch it (and for that purpose you can’t use
+<em>config/autoload.php</em> to load the <a class="reference internal" href="../database/index.html"><span class="doc">Database Class</span></a>)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>try
+{
+        $this-&gt;load-&gt;database();
+}
+catch (RuntimeException $e)
+{
+        // Handle the failure
+}
+</pre></div>
+</div>
+<p>Or you may leave it to CodeIgniter’s default exception handler, which would
+log the error message and display an error screen if you’re running in
+development mode.</p>
+<div class="section" id="remove-db-set-charset-calls">
+<h3>Remove db_set_charset() calls<a class="headerlink" href="#remove-db-set-charset-calls" title="Permalink to this headline">¶</a></h3>
+<p>With the above-mentioned changes, the purpose of the <code class="docutils literal notranslate"><span class="pre">db_set_charset()</span></code>
+method would now only be to change the connection character set at runtime.
+That doesn’t make sense and that’s the reason why most database drivers
+don’t support it at all.
+Thus, <code class="docutils literal notranslate"><span class="pre">db_set_charset()</span></code> is no longer necessary and is removed.</p>
+</div>
+</div>
+<div class="section" id="step-5-check-logic-related-to-uri-parsing-of-cli-requests">
+<h2>Step 5: Check logic related to URI parsing of CLI requests<a class="headerlink" href="#step-5-check-logic-related-to-uri-parsing-of-cli-requests" title="Permalink to this headline">¶</a></h2>
+<p>When running a CodeIgniter application from the CLI, the
+<a class="reference internal" href="../libraries/uri.html"><span class="doc">URI Library</span></a> will now ignore the
+<code class="docutils literal notranslate"><span class="pre">$config['url_suffix']</span></code> and <code class="docutils literal notranslate"><span class="pre">$config['permitted_uri_chars']</span></code>
+configuration settings.</p>
+<p>These two options don’t make sense under the command line (which is why
+this change was made) and therefore you shouldn’t be affected by this, but
+if you’ve relied on them for some reason, you’d probably have to make some
+changes to your code.</p>
+</div>
+<div class="section" id="step-6-check-cache-library-configurations-for-redis-memcache-d">
+<h2>Step 6: Check Cache Library configurations for Redis, Memcache(d)<a class="headerlink" href="#step-6-check-cache-library-configurations-for-redis-memcache-d" title="Permalink to this headline">¶</a></h2>
+<p>The new improvements for the ‘redis’ and ‘memcached’ drivers of the
+<a class="reference internal" href="../libraries/caching.html"><span class="doc">Cache Library</span></a> may require some small
+adjustments to your configuration values …</p>
+<div class="section" id="redis">
+<h3>Redis<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h3>
+<p>If you’re using the ‘redis’ driver with a UNIX socket connection, you’ll
+have to move the socket path from <code class="docutils literal notranslate"><span class="pre">$config['socket']</span></code> to
+<code class="docutils literal notranslate"><span class="pre">$config['host']</span></code> instead.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">$config['socket_type']</span></code> option is also removed, although that won’t
+affect your application - it will be ignored and the connection type will
+be determined by the format used for <code class="docutils literal notranslate"><span class="pre">$config['host']</span></code> instead.</p>
+</div>
+<div class="section" id="memcache-d">
+<h3>Memcache(d)<a class="headerlink" href="#memcache-d" title="Permalink to this headline">¶</a></h3>
+<p>The ‘memcached’ will now ignore configurations that don’t specify a <code class="docutils literal notranslate"><span class="pre">host</span></code>
+value (previously, it just set the host to the default ‘127.0.0.1’).</p>
+<p>Therefore, if you’ve added a configuration that only sets e.g. a <code class="docutils literal notranslate"><span class="pre">port</span></code>,
+you will now have to explicitly set the <code class="docutils literal notranslate"><span class="pre">host</span></code> to ‘127.0.0.1’ as well.</p>
+</div>
+</div>
+<div class="section" id="step-7-check-usage-of-the-email-library">
+<h2>Step 7: Check usage of the Email library<a class="headerlink" href="#step-7-check-usage-of-the-email-library" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../libraries/email.html"><span class="doc">Email Library</span></a> will now by default check the
+validity of all e-mail addresses passed to it. This check used to be Off by
+default, and required explicitly setting the <strong>validate</strong> option to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>
+in order to enable it.</p>
+<p>Naturally, a validity check should not result in any problems, but this is
+technically a backwards-compatibility break and you should check that
+everything works fine.
+If something indeed goes wrong with that, please report it as a bug to us,
+and you can disable the <strong>validate</strong> option to revert to the old behavior.</p>
+</div>
+<div class="section" id="step-8-check-usage-of-doctype-html-helper">
+<h2>Step 8: Check usage of doctype() HTML helper<a class="headerlink" href="#step-8-check-usage-of-doctype-html-helper" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../helpers/html_helper.html"><span class="doc">HTML Helper</span></a> function
+<a href="#id1"><span class="problematic" id="id2">:php:func:`doctype()`</span></a> used to default to ‘xhtml1-strict’ (XHTML 1.0 Strict)
+when no document type was specified. That default value is now changed to
+‘html5’, which obviously stands for the modern HTML 5 standard.</p>
+<p>Nothing should be really broken by this change, but if your application
+relies on the default value, you should double-check it and either
+explicitly set the desired format, or adapt your front-end to use proper
+HTML 5 formatting.</p>
+</div>
+<div class="section" id="step-9-check-usage-of-form-upload-form-helper">
+<h2>Step 9: Check usage of form_upload() Form helper<a class="headerlink" href="#step-9-check-usage-of-form-upload-form-helper" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../helpers/form_helper.html"><span class="doc">Form Helper</span></a> function
+<a href="#id3"><span class="problematic" id="id4">:php:func:`form_upload()`</span></a> used to have 3 parameters, the second of which
+(<code class="docutils literal notranslate"><span class="pre">$value</span></code>) was never used, as it doesn’t make sense for an HTML <code class="docutils literal notranslate"><span class="pre">input</span></code>
+tag of the “file” type.</p>
+<p>That dead parameter is now removed, and so if you’ve used the third one
+(<code class="docutils literal notranslate"><span class="pre">$extra</span></code>), having code like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>form_upload(&#39;name&#39;, &#39;irrelevant value&#39;, $extra);
+</pre></div>
+</div>
+<p>You should change it to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>form_upload(&#39;name&#39;, $extra);
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-10-remove-usage-of-previously-deprecated-functionalities">
+<h2>Step 10: Remove usage of previously deprecated functionalities<a class="headerlink" href="#step-10-remove-usage-of-previously-deprecated-functionalities" title="Permalink to this headline">¶</a></h2>
+<p>The following is a list of functionalities deprecated in previous
+CodeIgniter versions that have been removed in 3.2.0:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">$config['allow_get_array']</span></code> (use <code class="docutils literal notranslate"><span class="pre">$_GET</span> <span class="pre">=</span> <span class="pre">array();</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$config['standardize_newlines']</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$config['rewrite_short_tags']</span></code> (no impact; irrelevant on PHP 5.4+)</p></li>
+<li><p>‘sqlite’ database driver (no longer shipped with PHP 5.4+; ‘sqlite3’ is still available)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CI_Input::is_cli_request()</span></code> (use <a href="#id5"><span class="problematic" id="id6">:php:func:`is_cli()`</span></a> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CI_Router::fetch_directory()</span></code> (use <code class="docutils literal notranslate"><span class="pre">CI_Router::$directory</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CI_Router::fetch_class()</span></code> (use <code class="docutils literal notranslate"><span class="pre">CI_Router::$class</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CI_Router::fetch_method()</span></code> (use <code class="docutils literal notranslate"><span class="pre">CI_Router::$method</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CI_Config::system_url()</span></code> (encourages insecure practices)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CI_Form_validation::prep_for_form()</span></code> (the <em>prep_for_form</em> rule)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">standard_date()</span></code> <a class="reference internal" href="../helpers/date_helper.html"><span class="doc">Date Helper</span></a> function (use <code class="docutils literal notranslate"><span class="pre">date()</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">do_hash()</span></code> <a class="reference internal" href="../helpers/security_helper.html"><span class="doc">Security Helper</span></a> function (use <code class="docutils literal notranslate"><span class="pre">hash()</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">br()</span></code> <a class="reference internal" href="../helpers/html_helper.html"><span class="doc">HTML Helper</span></a> function (use <code class="docutils literal notranslate"><span class="pre">str_repeat()</span></code> with <code class="docutils literal notranslate"><span class="pre">'&lt;br</span> <span class="pre">/&gt;'</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nbs()</span></code> <a class="reference internal" href="../helpers/html_helper.html"><span class="doc">HTML Helper</span></a> function (use <code class="docutils literal notranslate"><span class="pre">str_repeat()</span></code> with <code class="docutils literal notranslate"><span class="pre">'&amp;nbsp;'</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trim_slashes()</span></code> <a class="reference internal" href="../helpers/string_helper.html"><span class="doc">String Helper</span></a> function (use <code class="docutils literal notranslate"><span class="pre">trim()</span></code> with <code class="docutils literal notranslate"><span class="pre">'/'</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">repeater()</span></code> <a class="reference internal" href="../helpers/string_helper.html"><span class="doc">String Helper</span></a> function (use <code class="docutils literal notranslate"><span class="pre">str_repeat()</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_file()</span></code> <a class="reference internal" href="../helpers/file_helper.html"><span class="doc">File Helper</span></a> function (use <code class="docutils literal notranslate"><span class="pre">file_get_contents()</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">form_prep()</span></code> <a class="reference internal" href="../helpers/form_helper.html"><span class="doc">Form Helper</span></a> function (use <a href="#id7"><span class="problematic" id="id8">:php:func:`html_escape()`</span></a> instead)</p></li>
+<li><p>The entire <em>Cart Library</em> (an archived version is available on GitHub: <a class="reference external" href="https://github.com/bcit-ci/ci3-cart-library">bcit-ci/ci3-cart-library</a>)</p></li>
+<li><p>The entire <em>Javascript Library</em> (it was always experimental in the first place)</p></li>
+<li><p>The entire <em>Email Helper</em>, which only had two functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">valid_email()</span></code> (use <code class="docutils literal notranslate"><span class="pre">filter_var($email,</span> <span class="pre">FILTER_VALIDATE_EMAIL)</span></code> instead)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">send_email()</span></code> (use <code class="docutils literal notranslate"><span class="pre">mail()</span></code> instead)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>The entire <em>Smiley Helper</em> (an archived version is available on GitHub: <a class="reference external" href="https://github.com/bcit-ci/ci3-smiley-helper">bcit-ci/ci3-smiley-helper</a>)</p></li>
+</ul>
+</div>
+<div class="section" id="step-11-make-sure-you-re-validating-all-user-inputs">
+<h2>Step 11: Make sure you’re validating all user inputs<a class="headerlink" href="#step-11-make-sure-you-re-validating-all-user-inputs" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../libraries/input.html"><span class="doc">Input Library</span></a> used to (often
+unconditionally) filter and/or sanitize user input in the <code class="docutils literal notranslate"><span class="pre">$_GET</span></code>,
+<code class="docutils literal notranslate"><span class="pre">$_POST</span></code> and <code class="docutils literal notranslate"><span class="pre">$_COOKIE</span></code> superglobals.</p>
+<p>This was a legacy feature from older times, when things like
+<a class="reference external" href="https://secure.php.net/register_globals">register_globals</a> and
+<a class="reference external" href="https://secure.php.net/magic_quotes_gpc">magic_quotes_gpc</a> existed in
+PHP.
+It was a necessity back then, but this is no longer the case and reliance
+on global filters is a bad practice, giving you a false sense of security.</p>
+<p>This functionality is now removed, and so if you’ve relied on it for
+whatever reasons, you should double-check that you are properly validating
+all user inputs in your application (as you always should do).</p>
+</div>
+<div class="section" id="step-12-clear-your-output-cache-optional">
+<h2>Step 12: Clear your output cache (optional)<a class="headerlink" href="#step-12-clear-your-output-cache-optional" title="Permalink to this headline">¶</a></h2>
+<p>Internal changes to the <a class="reference internal" href="../libraries/output.html"><span class="doc">Output Class</span></a> make it
+so that if you’re using the <a class="reference internal" href="../general/caching.html"><span class="doc">Web Page Caching</span></a>
+feature, you’ll be left with some old, garbage cache files.</p>
+<p>That shouldn’t be a problem, but you may want to clear them.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Upgrading from 3.1.x to 3.2.x</a><ul>
+<li><a class="reference internal" href="#step-1-update-your-codeigniter-files">Step 1: Update your CodeIgniter files</a></li>
+<li><a class="reference internal" href="#step-2-check-your-php-version">Step 2: Check your PHP version</a></li>
+<li><a class="reference internal" href="#step-3-remove-calls-to-ci-model-construct">Step 3: Remove calls to <code class="docutils literal notranslate"><span class="pre">CI_Model::__construct()</span></code></a></li>
+<li><a class="reference internal" href="#step-4-change-database-connection-handling">Step 4: Change database connection handling</a><ul>
+<li><a class="reference internal" href="#remove-db-set-charset-calls">Remove db_set_charset() calls</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#step-5-check-logic-related-to-uri-parsing-of-cli-requests">Step 5: Check logic related to URI parsing of CLI requests</a></li>
+<li><a class="reference internal" href="#step-6-check-cache-library-configurations-for-redis-memcache-d">Step 6: Check Cache Library configurations for Redis, Memcache(d)</a><ul>
+<li><a class="reference internal" href="#redis">Redis</a></li>
+<li><a class="reference internal" href="#memcache-d">Memcache(d)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#step-7-check-usage-of-the-email-library">Step 7: Check usage of the Email library</a></li>
+<li><a class="reference internal" href="#step-8-check-usage-of-doctype-html-helper">Step 8: Check usage of doctype() HTML helper</a></li>
+<li><a class="reference internal" href="#step-9-check-usage-of-form-upload-form-helper">Step 9: Check usage of form_upload() Form helper</a></li>
+<li><a class="reference internal" href="#step-10-remove-usage-of-previously-deprecated-functionalities">Step 10: Remove usage of previously deprecated functionalities</a></li>
+<li><a class="reference internal" href="#step-11-make-sure-you-re-validating-all-user-inputs">Step 11: Make sure you’re validating all user inputs</a></li>
+<li><a class="reference internal" href="#step-12-clear-your-output-cache-optional">Step 12: Clear your output cache (optional)</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/installation/upgrade_320.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Upgrading from 1.7.2 to 2.0.0 &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="upgrading-from-1-7-2-to-2-0-0">
+<h1>Upgrading from 1.7.2 to 2.0.0<a class="headerlink" href="#upgrading-from-1-7-2-to-2-0-0" title="Permalink to this headline">¶</a></h1>
+<p>Before performing an update you should take your site offline by
+replacing the index.php file with a static one.</p>
+<div class="section" id="update-instructions">
+<h2>Update Instructions<a class="headerlink" href="#update-instructions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-1-update-your-codeigniter-files">
+<h3>Step 1: Update your CodeIgniter files<a class="headerlink" href="#step-1-update-your-codeigniter-files" title="Permalink to this headline">¶</a></h3>
+<p>Replace all files and directories in your “system” folder <strong>except</strong>
+your application folder.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have any custom developed files in these folders please
+make copies of them first.</p>
+</div>
+</div>
+<div class="section" id="step-2-adjust-get-dir-file-info-where-necessary">
+<h3>Step 2: Adjust get_dir_file_info() where necessary<a class="headerlink" href="#step-2-adjust-get-dir-file-info-where-necessary" title="Permalink to this headline">¶</a></h3>
+<p>Version 2.0.0 brings a non-backwards compatible change to
+get_dir_file_info() in the <a class="reference internal" href="../helpers/file_helper.html"><span class="doc">File
+Helper</span></a>. Non-backwards compatible changes
+are extremely rare in CodeIgniter, but this one we feel was warranted
+due to how easy it was to create serious server performance issues. If
+you <em>need</em> recursiveness where you are using this helper function,
+change such instances, setting the second parameter, $top_level_only
+to FALSE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">get_dir_file_info</span><span class="p">(</span><span class="s1">&#39;/path/to/directory&#39;</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-convert-your-plugins-to-helpers">
+<h3>Step 3: Convert your Plugins to Helpers<a class="headerlink" href="#step-3-convert-your-plugins-to-helpers" title="Permalink to this headline">¶</a></h3>
+<p>2.0.0 gets rid of the “Plugin” system as their functionality was
+identical to Helpers, but non-extensible. You will need to rename your
+plugin files from filename_pi.php to filename_helper.php, move them to
+your helpers folder, and change all instances of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;plugin(&#39;foo&#39;);
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;helper(&#39;foo&#39;);
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-update-stored-encrypted-data">
+<h3>Step 4: Update stored encrypted data<a class="headerlink" href="#step-4-update-stored-encrypted-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your application does not use the Encrypt library, does
+not store Encrypted data permanently, or is on an environment that does
+not support Mcrypt, you may skip this step.</p>
+</div>
+<p>The Encrypt library has had a number of improvements, some for
+encryption strength and some for performance, that has an unavoidable
+consequence of making it no longer possible to decode encrypted data
+produced by the original version of this library. To help with the
+transition, a new method has been added, encode_from_legacy() that
+will decode the data with the original algorithm and return a re-encoded
+string using the improved methods. This will enable you to easily
+replace stale encrypted data with fresh in your applications, either on
+the fly or en masse.</p>
+<p>Please read <a class="reference internal" href="../libraries/encrypt.html"><span class="doc">how to use this
+method</span></a> in the Encrypt library
+documentation.</p>
+</div>
+<div class="section" id="step-5-remove-loading-calls-for-the-compatibility-helper">
+<h3>Step 5: Remove loading calls for the compatibility helper.<a class="headerlink" href="#step-5-remove-loading-calls-for-the-compatibility-helper" title="Permalink to this headline">¶</a></h3>
+<p>The compatibility helper has been removed from the CodeIgniter core. All
+methods in it should be natively available in supported PHP versions.</p>
+</div>
+<div class="section" id="step-6-update-class-extension">
+<h3>Step 6: Update Class extension<a class="headerlink" href="#step-6-update-class-extension" title="Permalink to this headline">¶</a></h3>
+<p>All core classes are now prefixed with CI_. Update Models and
+Controllers to extend CI_Model and CI_Controller, respectively.</p>
+</div>
+<div class="section" id="step-7-update-parent-constructor-calls">
+<h3>Step 7: Update Parent Constructor calls<a class="headerlink" href="#step-7-update-parent-constructor-calls" title="Permalink to this headline">¶</a></h3>
+<p>All native CodeIgniter classes now use the PHP 5 __construct()
+convention. Please update extended libraries to call
+parent::__construct().</p>
+</div>
+<div class="section" id="step-8-move-any-core-extensions-to-application-core">
+<h3>Step 8: Move any core extensions to application/core<a class="headerlink" href="#step-8-move-any-core-extensions-to-application-core" title="Permalink to this headline">¶</a></h3>
+<p>Any extensions to core classes (e.g. MY_Controller.php) in your
+application/libraries folder must be moved to the new
+application/core folder.</p>
+</div>
+<div class="section" id="step-9-update-your-user-guide">
+<h3>Step 9: Update your user guide<a class="headerlink" href="#step-9-update-your-user-guide" title="Permalink to this headline">¶</a></h3>
+<p>Please replace your local copy of the user guide with the new version,
+including the image files.</p>
+</div>
+</div>
+<div class="section" id="update-notes">
+<h2>Update Notes<a class="headerlink" href="#update-notes" title="Permalink to this headline">¶</a></h2>
+<p>Please refer to the <a class="reference internal" href="../changelog.html#changelog"><span class="std std-ref">2.0.0 Change Log</span></a> for full
+details, but here are some of the larger changes that are more likely to
+impact your code:</p>
+<ul class="simple">
+<li><p>Scaffolding has been removed.</p></li>
+<li><p>The CAPTCHA plugin in now a <span class="xref std std-doc">helper</span>.</p></li>
+<li><p>The JavaScript calendar plugin was removed.</p></li>
+<li><p>The <em>system/cache</em> and <em>system/logs</em> directories are now in the application
+directory.</p></li>
+<li><p>The Validation class has been removed.  Please see the
+<span class="xref std std-doc">Form Validation library</span></p></li>
+<li><p>“default” is now a reserved name.</p></li>
+<li><p>The xss_clean() function has moved to the <span class="xref std std-doc">Security Class</span>.</p></li>
+<li><p>do_xss_clean() now returns FALSE if the uploaded file fails XSS checks.</p></li>
+<li><p>The <span class="xref std std-doc">Session Class</span> requires now the use of an
+encryption key set in the config file.</p></li>
+<li><p>The following deprecated Active Record functions have been removed:
+<code class="docutils literal notranslate"><span class="pre">orwhere</span></code>, <code class="docutils literal notranslate"><span class="pre">orlike</span></code>, <code class="docutils literal notranslate"><span class="pre">groupby</span></code>, <code class="docutils literal notranslate"><span class="pre">orhaving</span></code>, <code class="docutils literal notranslate"><span class="pre">orderby</span></code>,
+<code class="docutils literal notranslate"><span class="pre">getwhere</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_drop_database()</span></code> and <code class="docutils literal notranslate"><span class="pre">_create_database()</span></code> functions have been removed
+from the db utility drivers.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">dohash()</span></code> function of the <span class="xref std std-doc">Security helper</span>
+has been renamed to <code class="docutils literal notranslate"><span class="pre">do_hash()</span></code> for naming consistency.</p></li>
+</ul>
+<div class="section" id="the-config-folder">
+<h3>The config folder<a class="headerlink" href="#the-config-folder" title="Permalink to this headline">¶</a></h3>
+<p>The following files have been changed:</p>
+<ul class="simple">
+<li><p>config.php</p></li>
+<li><p>database.php</p></li>
+<li><p>mimes.php</p></li>
+<li><p>routes.php</p></li>
+<li><p>user_agents.php</p></li>
+</ul>
+<p>The following files have been added:</p>
+<ul class="simple">
+<li><p>foreign_chars.php</p></li>
+<li><p>profiler.php</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Upgrading from 1.7.2 to 2.0.0</a><ul>
+<li><a class="reference internal" href="#update-instructions">Update Instructions</a><ul>
+<li><a class="reference internal" href="#step-1-update-your-codeigniter-files">Step 1: Update your CodeIgniter files</a></li>
+<li><a class="reference internal" href="#step-2-adjust-get-dir-file-info-where-necessary">Step 2: Adjust get_dir_file_info() where necessary</a></li>
+<li><a class="reference internal" href="#step-3-convert-your-plugins-to-helpers">Step 3: Convert your Plugins to Helpers</a></li>
+<li><a class="reference internal" href="#step-4-update-stored-encrypted-data">Step 4: Update stored encrypted data</a></li>
+<li><a class="reference internal" href="#step-5-remove-loading-calls-for-the-compatibility-helper">Step 5: Remove loading calls for the compatibility helper.</a></li>
+<li><a class="reference internal" href="#step-6-update-class-extension">Step 6: Update Class extension</a></li>
+<li><a class="reference internal" href="#step-7-update-parent-constructor-calls">Step 7: Update Parent Constructor calls</a></li>
+<li><a class="reference internal" href="#step-8-move-any-core-extensions-to-application-core">Step 8: Move any core extensions to application/core</a></li>
+<li><a class="reference internal" href="#step-9-update-your-user-guide">Step 9: Update your user guide</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#update-notes">Update Notes</a><ul>
+<li><a class="reference internal" href="#the-config-folder">The config folder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/installation/upgrade_200.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

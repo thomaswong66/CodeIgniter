@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Transactions &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="transactions">
+<h1>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h1>
+<p>CodeIgniter’s database abstraction allows you to use transactions with
+databases that support transaction-safe table types. In MySQL, you’ll
+need to be running InnoDB or BDB table types rather than the more common
+MyISAM. Most other database platforms support transactions natively.</p>
+<p>If you are not familiar with transactions we recommend you find a good
+online resource to learn about them for your particular database. The
+information below assumes you have a basic understanding of
+transactions.</p>
+<div class="section" id="codeigniter-s-approach-to-transactions">
+<h2>CodeIgniter’s Approach to Transactions<a class="headerlink" href="#codeigniter-s-approach-to-transactions" title="Permalink to this headline">¶</a></h2>
+<p>CodeIgniter utilizes an approach to transactions that is very similar to
+the process used by the popular database class ADODB. We’ve chosen that
+approach because it greatly simplifies the process of running
+transactions. In most cases all that is required are two lines of code.</p>
+<p>Traditionally, transactions have required a fair amount of work to
+implement since they demand that you keep track of your queries and
+determine whether to commit or rollback based on the success or failure
+of your queries. This is particularly cumbersome with nested queries. In
+contrast, we’ve implemented a smart transaction system that does all
+this for you automatically (you can also manage your transactions
+manually if you choose to, but there’s really no benefit).</p>
+</div>
+<div class="section" id="running-transactions">
+<h2>Running Transactions<a class="headerlink" href="#running-transactions" title="Permalink to this headline">¶</a></h2>
+<p>To run your queries using transactions you will use the
+$this-&gt;db-&gt;trans_start() and $this-&gt;db-&gt;trans_complete() functions as
+follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;trans_start();
+$this-&gt;db-&gt;query(&#39;AN SQL QUERY...&#39;);
+$this-&gt;db-&gt;query(&#39;ANOTHER QUERY...&#39;);
+$this-&gt;db-&gt;query(&#39;AND YET ANOTHER QUERY...&#39;);
+$this-&gt;db-&gt;trans_complete();
+</pre></div>
+</div>
+<p>You can run as many queries as you want between the start/complete
+functions and they will all be committed or rolled back based on success
+or failure of any given query.</p>
+</div>
+<div class="section" id="strict-mode">
+<h2>Strict Mode<a class="headerlink" href="#strict-mode" title="Permalink to this headline">¶</a></h2>
+<p>By default CodeIgniter runs all transactions in Strict Mode. When strict
+mode is enabled, if you are running multiple groups of transactions, if
+one group fails all groups will be rolled back. If strict mode is
+disabled, each group is treated independently, meaning a failure of one
+group will not affect any others.</p>
+<p>Strict Mode can be disabled as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;trans_strict(FALSE);
+</pre></div>
+</div>
+</div>
+<div class="section" id="managing-errors">
+<h2>Managing Errors<a class="headerlink" href="#managing-errors" title="Permalink to this headline">¶</a></h2>
+<p>If you have error reporting enabled in your config/database.php file
+you’ll see a standard error message if the commit was unsuccessful. If
+debugging is turned off, you can manage your own errors like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;trans_start();
+$this-&gt;db-&gt;query(&#39;AN SQL QUERY...&#39;);
+$this-&gt;db-&gt;query(&#39;ANOTHER QUERY...&#39;);
+$this-&gt;db-&gt;trans_complete();
+
+if ($this-&gt;db-&gt;trans_status() === FALSE)
+{
+        // generate an error... or use the log_message() function to log your error
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="disabling-transactions">
+<h2>Disabling Transactions<a class="headerlink" href="#disabling-transactions" title="Permalink to this headline">¶</a></h2>
+<p>If you would like to disable transactions you can do so using
+<code class="docutils literal notranslate"><span class="pre">$this-&gt;db-&gt;trans_off()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;trans_off();
+
+$this-&gt;db-&gt;trans_start();
+$this-&gt;db-&gt;query(&#39;AN SQL QUERY...&#39;);
+$this-&gt;db-&gt;trans_complete();
+</pre></div>
+</div>
+<p>When transactions are disabled, your queries will be auto-committed, just as
+they are when running queries without transactions, practically ignoring
+any calls to <code class="docutils literal notranslate"><span class="pre">trans_start()</span></code>, <code class="docutils literal notranslate"><span class="pre">trans_complete()</span></code>, etc.</p>
+</div>
+<div class="section" id="test-mode">
+<h2>Test Mode<a class="headerlink" href="#test-mode" title="Permalink to this headline">¶</a></h2>
+<p>You can optionally put the transaction system into “test mode”, which
+will cause your queries to be rolled back – even if the queries produce
+a valid result. To use test mode simply set the first parameter in the
+$this-&gt;db-&gt;trans_start() function to TRUE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;trans_start(TRUE); // Query will be rolled back
+$this-&gt;db-&gt;query(&#39;AN SQL QUERY...&#39;);
+$this-&gt;db-&gt;trans_complete();
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-transactions-manually">
+<h2>Running Transactions Manually<a class="headerlink" href="#running-transactions-manually" title="Permalink to this headline">¶</a></h2>
+<p>If you would like to run transactions manually you can do so as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;trans_begin();
+
+$this-&gt;db-&gt;query(&#39;AN SQL QUERY...&#39;);
+$this-&gt;db-&gt;query(&#39;ANOTHER QUERY...&#39;);
+$this-&gt;db-&gt;query(&#39;AND YET ANOTHER QUERY...&#39;);
+
+if ($this-&gt;db-&gt;trans_status() === FALSE)
+{
+        $this-&gt;db-&gt;trans_rollback();
+}
+else
+{
+        $this-&gt;db-&gt;trans_commit();
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure to use $this-&gt;db-&gt;trans_begin() when running manual
+transactions, <strong>NOT</strong> $this-&gt;db-&gt;trans_start().</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Transactions</a><ul>
+<li><a class="reference internal" href="#codeigniter-s-approach-to-transactions">CodeIgniter’s Approach to Transactions</a></li>
+<li><a class="reference internal" href="#running-transactions">Running Transactions</a></li>
+<li><a class="reference internal" href="#strict-mode">Strict Mode</a></li>
+<li><a class="reference internal" href="#managing-errors">Managing Errors</a></li>
+<li><a class="reference internal" href="#disabling-transactions">Disabling Transactions</a></li>
+<li><a class="reference internal" href="#test-mode">Test Mode</a></li>
+<li><a class="reference internal" href="#running-transactions-manually">Running Transactions Manually</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/database/transactions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

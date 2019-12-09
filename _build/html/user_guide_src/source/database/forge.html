@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Database Forge Class &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="database-forge-class">
+<h1><a class="toc-backref" href="#id1">Database Forge Class</a><a class="headerlink" href="#database-forge-class" title="Permalink to this headline">¶</a></h1>
+<p>The Database Forge Class contains methods that help you manage your
+database.</p>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#database-forge-class" id="id1">Database Forge Class</a></p>
+<ul>
+<li><p><a class="reference internal" href="#initializing-the-forge-class" id="id2">Initializing the Forge Class</a></p></li>
+<li><p><a class="reference internal" href="#creating-and-dropping-databases" id="id3">Creating and Dropping Databases</a></p></li>
+<li><p><a class="reference internal" href="#creating-and-dropping-tables" id="id4">Creating and Dropping Tables</a></p>
+<ul>
+<li><p><a class="reference internal" href="#adding-fields" id="id5">Adding fields</a></p></li>
+<li><p><a class="reference internal" href="#adding-keys" id="id6">Adding Keys</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-table" id="id7">Creating a table</a></p></li>
+<li><p><a class="reference internal" href="#dropping-a-table" id="id8">Dropping a table</a></p></li>
+<li><p><a class="reference internal" href="#renaming-a-table" id="id9">Renaming a table</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#modifying-tables" id="id10">Modifying Tables</a></p>
+<ul>
+<li><p><a class="reference internal" href="#adding-a-column-to-a-table" id="id11">Adding a Column to a Table</a></p></li>
+<li><p><a class="reference internal" href="#dropping-a-column-from-a-table" id="id12">Dropping a Column From a Table</a></p></li>
+<li><p><a class="reference internal" href="#modifying-a-column-in-a-table" id="id13">Modifying a Column in a Table</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#class-reference" id="id14">Class Reference</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="initializing-the-forge-class">
+<h2><a class="toc-backref" href="#id2">Initializing the Forge Class</a><a class="headerlink" href="#initializing-the-forge-class" title="Permalink to this headline">¶</a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In order to initialize the Forge class, your database
+driver must already be running, since the forge class relies on it.</p>
+</div>
+<p>Load the Forge Class as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;dbforge()
+</pre></div>
+</div>
+<p>You can also pass another database object to the DB Forge loader, in case
+the database you want to manage isn’t the default one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;myforge = $this-&gt;load-&gt;dbforge($this-&gt;other_db, TRUE);
+</pre></div>
+</div>
+<p>In the above example, we’re passing a custom database object as the first
+parameter and then tell it to return the dbforge object, instead of
+assigning it directly to <code class="docutils literal notranslate"><span class="pre">$this-&gt;dbforge</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both of the parameters can be used individually, just pass an empty
+value as the first one if you wish to skip it.</p>
+</div>
+<p>Once initialized you will access the methods using the <code class="docutils literal notranslate"><span class="pre">$this-&gt;dbforge</span></code>
+object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;some_method();
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-and-dropping-databases">
+<h2><a class="toc-backref" href="#id3">Creating and Dropping Databases</a><a class="headerlink" href="#creating-and-dropping-databases" title="Permalink to this headline">¶</a></h2>
+<p><strong>$this-&gt;dbforge-&gt;create_database(‘db_name’)</strong></p>
+<p>Permits you to create the database specified in the first parameter.
+Returns TRUE/FALSE based on success or failure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>if ($this-&gt;dbforge-&gt;create_database(&#39;my_db&#39;))
+{
+        echo &#39;Database created!&#39;;
+}
+</pre></div>
+</div>
+<p><strong>$this-&gt;dbforge-&gt;drop_database(‘db_name’)</strong></p>
+<p>Permits you to drop the database specified in the first parameter.
+Returns TRUE/FALSE based on success or failure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>if ($this-&gt;dbforge-&gt;drop_database(&#39;my_db&#39;))
+{
+        echo &#39;Database deleted!&#39;;
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-and-dropping-tables">
+<h2><a class="toc-backref" href="#id4">Creating and Dropping Tables</a><a class="headerlink" href="#creating-and-dropping-tables" title="Permalink to this headline">¶</a></h2>
+<p>There are several things you may wish to do when creating tables. Add
+fields, add keys to the table, alter columns. CodeIgniter provides a
+mechanism for this.</p>
+<div class="section" id="adding-fields">
+<h3><a class="toc-backref" href="#id5">Adding fields</a><a class="headerlink" href="#adding-fields" title="Permalink to this headline">¶</a></h3>
+<p>Fields are created via an associative array. Within the array you must
+include a ‘type’ key that relates to the datatype of the field. For
+example, INT, VARCHAR, TEXT, etc. Many datatypes (for example VARCHAR)
+also require a ‘constraint’ key.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$fields = array(
+        &#39;users&#39; =&gt; array(
+                &#39;type&#39; =&gt; &#39;VARCHAR&#39;,
+                &#39;constraint&#39; =&gt; &#39;100&#39;,
+        ),
+);
+// will translate to &quot;users VARCHAR(100)&quot; when the field is added.
+</pre></div>
+</div>
+<p>Additionally, the following key/values can be used:</p>
+<ul class="simple">
+<li><p>unsigned/true : to generate “UNSIGNED” in the field definition.</p></li>
+<li><p>default/value : to generate a default value in the field definition.</p></li>
+<li><p>null/true : to generate “NULL” in the field definition. Without this,
+the field will default to “NOT NULL”.</p></li>
+<li><p>auto_increment/true : generates an auto_increment flag on the
+field. Note that the field type must be a type that supports this,
+such as integer.</p></li>
+<li><p>unique/true : to generate a unique key for the field definition.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$fields = array(
+        &#39;blog_id&#39; =&gt; array(
+                &#39;type&#39; =&gt; &#39;INT&#39;,
+                &#39;constraint&#39; =&gt; 5,
+                &#39;unsigned&#39; =&gt; TRUE,
+                &#39;auto_increment&#39; =&gt; TRUE
+        ),
+        &#39;blog_title&#39; =&gt; array(
+                &#39;type&#39; =&gt; &#39;VARCHAR&#39;,
+                &#39;constraint&#39; =&gt; &#39;100&#39;,
+                &#39;unique&#39; =&gt; TRUE,
+        ),
+        &#39;blog_author&#39; =&gt; array(
+                &#39;type&#39; =&gt;&#39;VARCHAR&#39;,
+                &#39;constraint&#39; =&gt; &#39;100&#39;,
+                &#39;default&#39; =&gt; &#39;King of Town&#39;,
+        ),
+        &#39;blog_description&#39; =&gt; array(
+                &#39;type&#39; =&gt; &#39;TEXT&#39;,
+                &#39;null&#39; =&gt; TRUE,
+        ),
+);
+</pre></div>
+</div>
+<p>After the fields have been defined, they can be added using
+<code class="docutils literal notranslate"><span class="pre">$this-&gt;dbforge-&gt;add_field($fields);</span></code> followed by a call to the
+<code class="docutils literal notranslate"><span class="pre">create_table()</span></code> method.</p>
+<p><strong>$this-&gt;dbforge-&gt;add_field()</strong></p>
+<p>The add fields method will accept the above array.</p>
+<div class="section" id="passing-strings-as-fields">
+<h4>Passing strings as fields<a class="headerlink" href="#passing-strings-as-fields" title="Permalink to this headline">¶</a></h4>
+<p>If you know exactly how you want a field to be created, you can pass the
+string into the field definitions with add_field()</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;add_field(&quot;label varchar(100) NOT NULL DEFAULT &#39;default label&#39;&quot;);
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Passing raw strings as fields cannot be followed by <code class="docutils literal notranslate"><span class="pre">add_key()</span></code> calls on those fields.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Multiple calls to add_field() are cumulative.</p>
+</div>
+</div>
+<div class="section" id="creating-an-id-field">
+<h4>Creating an id field<a class="headerlink" href="#creating-an-id-field" title="Permalink to this headline">¶</a></h4>
+<p>There is a special exception for creating id fields. A field with type
+id will automatically be assigned as an INT(9) auto_incrementing
+Primary Key.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;add_field(&#39;id&#39;);
+// gives id INT(9) NOT NULL AUTO_INCREMENT
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="adding-keys">
+<h3><a class="toc-backref" href="#id6">Adding Keys</a><a class="headerlink" href="#adding-keys" title="Permalink to this headline">¶</a></h3>
+<p>Generally speaking, you’ll want your table to have Keys. This is
+accomplished with $this-&gt;dbforge-&gt;add_key(‘field’). An optional second
+parameter set to TRUE will make it a primary key. Note that add_key()
+must be followed by a call to create_table().</p>
+<p>Multiple column non-primary keys must be sent as an array. Sample output
+below is for MySQL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;add_key(&#39;blog_id&#39;, TRUE);
+// gives PRIMARY KEY `blog_id` (`blog_id`)
+
+$this-&gt;dbforge-&gt;add_key(&#39;blog_id&#39;, TRUE);
+$this-&gt;dbforge-&gt;add_key(&#39;site_id&#39;, TRUE);
+// gives PRIMARY KEY `blog_id_site_id` (`blog_id`, `site_id`)
+
+$this-&gt;dbforge-&gt;add_key(&#39;blog_name&#39;);
+// gives KEY `blog_name` (`blog_name`)
+
+$this-&gt;dbforge-&gt;add_key(array(&#39;blog_name&#39;, &#39;blog_label&#39;));
+// gives KEY `blog_name_blog_label` (`blog_name`, `blog_label`)
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-table">
+<h3><a class="toc-backref" href="#id7">Creating a table</a><a class="headerlink" href="#creating-a-table" title="Permalink to this headline">¶</a></h3>
+<p>After fields and keys have been declared, you can create a new table
+with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;create_table(&#39;table_name&#39;);
+// gives CREATE TABLE table_name
+</pre></div>
+</div>
+<p>An optional second parameter set to TRUE adds an “IF NOT EXISTS” clause
+into the definition</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;create_table(&#39;table_name&#39;, TRUE);
+// gives CREATE TABLE IF NOT EXISTS table_name
+</pre></div>
+</div>
+<p>You could also pass optional table attributes, such as MySQL’s <code class="docutils literal notranslate"><span class="pre">ENGINE</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$attributes = array(&#39;ENGINE&#39; =&gt; &#39;InnoDB&#39;);
+$this-&gt;dbforge-&gt;create_table(&#39;table_name&#39;, FALSE, $attributes);
+// produces: CREATE TABLE `table_name` (...) ENGINE = InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unless you specify the <code class="docutils literal notranslate"><span class="pre">CHARACTER</span> <span class="pre">SET</span></code> and/or <code class="docutils literal notranslate"><span class="pre">COLLATE</span></code> attributes,
+<code class="docutils literal notranslate"><span class="pre">create_table()</span></code> will always add them with your configured <em>char_set</em>
+and <em>dbcollat</em> values, as long as they are not empty (MySQL only).</p>
+</div>
+</div>
+<div class="section" id="dropping-a-table">
+<h3><a class="toc-backref" href="#id8">Dropping a table</a><a class="headerlink" href="#dropping-a-table" title="Permalink to this headline">¶</a></h3>
+<p>Execute a DROP TABLE statement and optionally add an IF EXISTS clause.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// Produces: DROP TABLE table_name
+$this-&gt;dbforge-&gt;drop_table(&#39;table_name&#39;);
+
+// Produces: DROP TABLE IF EXISTS table_name
+$this-&gt;dbforge-&gt;drop_table(&#39;table_name&#39;,TRUE);
+</pre></div>
+</div>
+</div>
+<div class="section" id="renaming-a-table">
+<h3><a class="toc-backref" href="#id9">Renaming a table</a><a class="headerlink" href="#renaming-a-table" title="Permalink to this headline">¶</a></h3>
+<p>Executes a TABLE rename</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;rename_table(&#39;old_table_name&#39;, &#39;new_table_name&#39;);
+// gives ALTER TABLE old_table_name RENAME TO new_table_name
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="modifying-tables">
+<h2><a class="toc-backref" href="#id10">Modifying Tables</a><a class="headerlink" href="#modifying-tables" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="adding-a-column-to-a-table">
+<h3><a class="toc-backref" href="#id11">Adding a Column to a Table</a><a class="headerlink" href="#adding-a-column-to-a-table" title="Permalink to this headline">¶</a></h3>
+<p><strong>$this-&gt;dbforge-&gt;add_column()</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">add_column()</span></code> method is used to modify an existing table. It
+accepts the same field array as above, and can be used for an unlimited
+number of additional fields.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$fields = array(
+        &#39;preferences&#39; =&gt; array(&#39;type&#39; =&gt; &#39;TEXT&#39;)
+);
+$this-&gt;dbforge-&gt;add_column(&#39;table_name&#39;, $fields);
+// Executes: ALTER TABLE table_name ADD preferences TEXT
+</pre></div>
+</div>
+<p>If you are using MySQL or CUBIRD, then you can take advantage of their
+AFTER and FIRST clauses to position the new column.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// Will place the new column after the `another_field` column:
+$fields = array(
+        &#39;preferences&#39; =&gt; array(&#39;type&#39; =&gt; &#39;TEXT&#39;, &#39;after&#39; =&gt; &#39;another_field&#39;)
+);
+
+// Will place the new column at the start of the table definition:
+$fields = array(
+        &#39;preferences&#39; =&gt; array(&#39;type&#39; =&gt; &#39;TEXT&#39;, &#39;first&#39; =&gt; TRUE)
+);
+</pre></div>
+</div>
+</div>
+<div class="section" id="dropping-a-column-from-a-table">
+<h3><a class="toc-backref" href="#id12">Dropping a Column From a Table</a><a class="headerlink" href="#dropping-a-column-from-a-table" title="Permalink to this headline">¶</a></h3>
+<p><strong>$this-&gt;dbforge-&gt;drop_column()</strong></p>
+<p>Used to remove a column from a table.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;dbforge-&gt;drop_column(&#39;table_name&#39;, &#39;column_to_drop&#39;);
+</pre></div>
+</div>
+</div>
+<div class="section" id="modifying-a-column-in-a-table">
+<h3><a class="toc-backref" href="#id13">Modifying a Column in a Table</a><a class="headerlink" href="#modifying-a-column-in-a-table" title="Permalink to this headline">¶</a></h3>
+<p><strong>$this-&gt;dbforge-&gt;modify_column()</strong></p>
+<p>The usage of this method is identical to <code class="docutils literal notranslate"><span class="pre">add_column()</span></code>, except it
+alters an existing column rather than adding a new one. In order to
+change the name you can add a “name” key into the field defining array.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$fields = array(
+        &#39;old_name&#39; =&gt; array(
+                &#39;name&#39; =&gt; &#39;new_name&#39;,
+                &#39;type&#39; =&gt; &#39;TEXT&#39;,
+        ),
+);
+$this-&gt;dbforge-&gt;modify_column(&#39;table_name&#39;, $fields);
+// gives ALTER TABLE table_name CHANGE old_name new_name TEXT
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="class-reference">
+<h2><a class="toc-backref" href="#id14">Class Reference</a><a class="headerlink" href="#class-reference" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Database Forge Class</a><ul>
+<li><a class="reference internal" href="#initializing-the-forge-class">Initializing the Forge Class</a></li>
+<li><a class="reference internal" href="#creating-and-dropping-databases">Creating and Dropping Databases</a></li>
+<li><a class="reference internal" href="#creating-and-dropping-tables">Creating and Dropping Tables</a><ul>
+<li><a class="reference internal" href="#adding-fields">Adding fields</a><ul>
+<li><a class="reference internal" href="#passing-strings-as-fields">Passing strings as fields</a></li>
+<li><a class="reference internal" href="#creating-an-id-field">Creating an id field</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-keys">Adding Keys</a></li>
+<li><a class="reference internal" href="#creating-a-table">Creating a table</a></li>
+<li><a class="reference internal" href="#dropping-a-table">Dropping a table</a></li>
+<li><a class="reference internal" href="#renaming-a-table">Renaming a table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#modifying-tables">Modifying Tables</a><ul>
+<li><a class="reference internal" href="#adding-a-column-to-a-table">Adding a Column to a Table</a></li>
+<li><a class="reference internal" href="#dropping-a-column-from-a-table">Dropping a Column From a Table</a></li>
+<li><a class="reference internal" href="#modifying-a-column-in-a-table">Modifying a Column in a Table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-reference">Class Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/database/forge.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

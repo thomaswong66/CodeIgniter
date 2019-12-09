@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Reserved Names &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="reserved-names">
+<h1>Reserved Names<a class="headerlink" href="#reserved-names" title="Permalink to this headline">¶</a></h1>
+<p>In order to help out, CodeIgniter uses a series of function, method,
+class and variable names in its operation. Because of this, some names
+cannot be used by a developer. Following is a list of reserved names
+that cannot be used.</p>
+<div class="section" id="controller-names">
+<h2>Controller names<a class="headerlink" href="#controller-names" title="Permalink to this headline">¶</a></h2>
+<p>Since your controller classes will extend the main application
+controller you must be careful not to name your methods identically to
+the ones used by that class, otherwise your local methods will
+override them. The following is a list of reserved names. Do not name
+your controller any of these:</p>
+<ul class="simple">
+<li><p>CI_Controller</p></li>
+<li><p>Default</p></li>
+<li><p>index</p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a href="#id1"><span class="problematic" id="id2">:php:func:`is_php()`</span></a></p></li>
+<li><p><a href="#id3"><span class="problematic" id="id4">:php:func:`is_really_writable()`</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_class()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_loaded()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_config()</span></code></p></li>
+<li><p><a href="#id5"><span class="problematic" id="id6">:php:func:`config_item()`</span></a></p></li>
+<li><p><a href="#id7"><span class="problematic" id="id8">:php:func:`show_error()`</span></a></p></li>
+<li><p><a href="#id9"><span class="problematic" id="id10">:php:func:`show_404()`</span></a></p></li>
+<li><p><a href="#id11"><span class="problematic" id="id12">:php:func:`log_message()`</span></a></p></li>
+<li><p><a href="#id13"><span class="problematic" id="id14">:php:func:`set_status_header()`</span></a></p></li>
+<li><p><a href="#id15"><span class="problematic" id="id16">:php:func:`get_mimes()`</span></a></p></li>
+<li><p><a href="#id17"><span class="problematic" id="id18">:php:func:`html_escape()`</span></a></p></li>
+<li><p><a href="#id19"><span class="problematic" id="id20">:php:func:`remove_invisible_characters()`</span></a></p></li>
+<li><p><a href="#id21"><span class="problematic" id="id22">:php:func:`is_https()`</span></a></p></li>
+<li><p><a href="#id23"><span class="problematic" id="id24">:php:func:`function_usable()`</span></a></p></li>
+<li><p><a href="#id25"><span class="problematic" id="id26">:php:func:`get_instance()`</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_error_handler()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_exception_handler()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_stringify_attributes()</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$config</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$db</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$lang</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>ENVIRONMENT</p></li>
+<li><p>FCPATH</p></li>
+<li><p>SELF</p></li>
+<li><p>BASEPATH</p></li>
+<li><p>APPPATH</p></li>
+<li><p>VIEWPATH</p></li>
+<li><p>CI_VERSION</p></li>
+<li><p>MB_ENABLED</p></li>
+<li><p>ICONV_ENABLED</p></li>
+<li><p>UTF8_ENABLED</p></li>
+<li><p>FILE_READ_MODE</p></li>
+<li><p>FILE_WRITE_MODE</p></li>
+<li><p>DIR_READ_MODE</p></li>
+<li><p>DIR_WRITE_MODE</p></li>
+<li><p>FOPEN_READ</p></li>
+<li><p>FOPEN_READ_WRITE</p></li>
+<li><p>FOPEN_WRITE_CREATE_DESTRUCTIVE</p></li>
+<li><p>FOPEN_READ_WRITE_CREATE_DESTRUCTIVE</p></li>
+<li><p>FOPEN_WRITE_CREATE</p></li>
+<li><p>FOPEN_READ_WRITE_CREATE</p></li>
+<li><p>FOPEN_WRITE_CREATE_STRICT</p></li>
+<li><p>FOPEN_READ_WRITE_CREATE_STRICT</p></li>
+<li><p>SHOW_DEBUG_BACKTRACE</p></li>
+<li><p>EXIT_SUCCESS</p></li>
+<li><p>EXIT_ERROR</p></li>
+<li><p>EXIT_CONFIG</p></li>
+<li><p>EXIT_UNKNOWN_FILE</p></li>
+<li><p>EXIT_UNKNOWN_CLASS</p></li>
+<li><p>EXIT_UNKNOWN_METHOD</p></li>
+<li><p>EXIT_USER_INPUT</p></li>
+<li><p>EXIT_DATABASE</p></li>
+<li><p>EXIT__AUTO_MIN</p></li>
+<li><p>EXIT__AUTO_MAX</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Reserved Names</a><ul>
+<li><a class="reference internal" href="#controller-names">Controller names</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+<li><a class="reference internal" href="#constants">Constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/general/reserved_names.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

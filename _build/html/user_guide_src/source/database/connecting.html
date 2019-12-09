@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Connecting to your Database &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="connecting-to-your-database">
+<h1>Connecting to your Database<a class="headerlink" href="#connecting-to-your-database" title="Permalink to this headline">¶</a></h1>
+<p>There are two ways to connect to a database:</p>
+<div class="section" id="automatically-connecting">
+<h2>Automatically Connecting<a class="headerlink" href="#automatically-connecting" title="Permalink to this headline">¶</a></h2>
+<p>The “auto connect” feature will load and instantiate the database class
+with every page load. To enable “auto connecting”, add the word database
+to the library array, as indicated in the following file:</p>
+<p>application/config/autoload.php</p>
+</div>
+<div class="section" id="manually-connecting">
+<h2>Manually Connecting<a class="headerlink" href="#manually-connecting" title="Permalink to this headline">¶</a></h2>
+<p>If only some of your pages require database connectivity you can
+manually connect to your database by adding this line of code in any
+function where it is needed, or in your class constructor to make the
+database available globally in that class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;database();
+</pre></div>
+</div>
+<p>If the above function does <strong>not</strong> contain any information in the first
+parameter it will connect to the group specified in your database config
+file. For most people, this is the preferred method of use.</p>
+<div class="section" id="available-parameters">
+<h3>Available Parameters<a class="headerlink" href="#available-parameters" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>The database connection values, passed either as an array or a DSN
+string.</p></li>
+<li><p>TRUE/FALSE (boolean). Whether to return the connection ID (see
+Connecting to Multiple Databases below).</p></li>
+<li><p>TRUE/FALSE (boolean). Whether to enable the Query Builder class. Set
+to TRUE by default.</p></li>
+</ol>
+</div>
+<div class="section" id="manually-connecting-to-a-database">
+<h3>Manually Connecting to a Database<a class="headerlink" href="#manually-connecting-to-a-database" title="Permalink to this headline">¶</a></h3>
+<p>The first parameter of this function can <strong>optionally</strong> be used to
+specify a particular database group from your config file, or you can
+even submit connection values for a database that is not specified in
+your config file. Examples:</p>
+<p>To choose a specific group from your config file you can do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;database(&#39;group_name&#39;);
+</pre></div>
+</div>
+<p>Where group_name is the name of the connection group from your config
+file.</p>
+<p>To connect manually to a desired database you can pass an array of
+values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$config[&#39;hostname&#39;] = &#39;localhost&#39;;
+$config[&#39;username&#39;] = &#39;myusername&#39;;
+$config[&#39;password&#39;] = &#39;mypassword&#39;;
+$config[&#39;database&#39;] = &#39;mydatabase&#39;;
+$config[&#39;dbdriver&#39;] = &#39;mysqli&#39;;
+$config[&#39;dbprefix&#39;] = &#39;&#39;;
+$config[&#39;pconnect&#39;] = FALSE;
+$config[&#39;db_debug&#39;] = TRUE;
+$config[&#39;cache_on&#39;] = FALSE;
+$config[&#39;cachedir&#39;] = &#39;&#39;;
+$config[&#39;char_set&#39;] = &#39;utf8&#39;;
+$config[&#39;dbcollat&#39;] = &#39;utf8_general_ci&#39;;
+$this-&gt;load-&gt;database($config);
+</pre></div>
+</div>
+<p>For information on each of these values please see the <a class="reference internal" href="configuration.html"><span class="doc">configuration
+page</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the PDO driver, you should use the $config[‘dsn’] setting
+instead of ‘hostname’ and ‘database’:</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">$config[‘dsn’] = ‘mysql:host=localhost;dbname=mydatabase’;</div>
+</div>
+</div>
+<p>Or you can submit your database values as a Data Source Name. DSNs must
+have this prototype:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$dsn = &#39;dbdriver://username:password@hostname/database&#39;;
+$this-&gt;load-&gt;database($dsn);
+</pre></div>
+</div>
+<p>To override default config values when connecting with a DSN string, add
+the config variables as a query string.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$dsn = &#39;dbdriver://username:password@hostname/database?char_set=utf8&amp;dbcollat=utf8_general_ci&amp;cache_on=true&amp;cachedir=/path/to/cache&#39;;
+$this-&gt;load-&gt;database($dsn);
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="connecting-to-multiple-databases">
+<h2>Connecting to Multiple Databases<a class="headerlink" href="#connecting-to-multiple-databases" title="Permalink to this headline">¶</a></h2>
+<p>If you need to connect to more than one database simultaneously you can
+do so as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$DB1 = $this-&gt;load-&gt;database(&#39;group_one&#39;, TRUE);
+$DB2 = $this-&gt;load-&gt;database(&#39;group_two&#39;, TRUE);
+</pre></div>
+</div>
+<p>Note: Change the words “group_one” and “group_two” to the specific
+group names you are connecting to (or you can pass the connection values
+as indicated above).</p>
+<p>By setting the second parameter to TRUE (boolean) the function will
+return the database object.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When you connect this way, you will use your object name to issue
+commands rather than the syntax used throughout this guide. In other
+words, rather than issuing commands with:</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">$this-&gt;db-&gt;query();</div>
+<div class="line">$this-&gt;db-&gt;result();</div>
+<div class="line">etc…</div>
+<div class="line"><br /></div>
+<div class="line">You will instead use:</div>
+<div class="line"><br /></div>
+<div class="line">$DB1-&gt;query();</div>
+<div class="line">$DB1-&gt;result();</div>
+<div class="line">etc…</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You don’t need to create separate database configurations if you
+only need to use a different database on the same connection. You
+can switch to a different database when you need to, like this:</p>
+<div class="line-block">
+<div class="line">$this-&gt;db-&gt;db_select($database2_name);</div>
+</div>
+</div>
+</div>
+<div class="section" id="reconnecting-keeping-the-connection-alive">
+<h2>Reconnecting / Keeping the Connection Alive<a class="headerlink" href="#reconnecting-keeping-the-connection-alive" title="Permalink to this headline">¶</a></h2>
+<p>If the database server’s idle timeout is exceeded while you’re doing
+some heavy PHP lifting (processing an image, for instance), you should
+consider pinging the server by using the reconnect() method before
+sending further queries, which can gracefully keep the connection alive
+or re-establish it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;reconnect();
+</pre></div>
+</div>
+</div>
+<div class="section" id="manually-closing-the-connection">
+<h2>Manually closing the Connection<a class="headerlink" href="#manually-closing-the-connection" title="Permalink to this headline">¶</a></h2>
+<p>While CodeIgniter intelligently takes care of closing your database
+connections, you can explicitly close the connection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;db-&gt;close();
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Connecting to your Database</a><ul>
+<li><a class="reference internal" href="#automatically-connecting">Automatically Connecting</a></li>
+<li><a class="reference internal" href="#manually-connecting">Manually Connecting</a><ul>
+<li><a class="reference internal" href="#available-parameters">Available Parameters</a></li>
+<li><a class="reference internal" href="#manually-connecting-to-a-database">Manually Connecting to a Database</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connecting-to-multiple-databases">Connecting to Multiple Databases</a></li>
+<li><a class="reference internal" href="#reconnecting-keeping-the-connection-alive">Reconnecting / Keeping the Connection Alive</a></li>
+<li><a class="reference internal" href="#manually-closing-the-connection">Manually closing the Connection</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/database/connecting.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

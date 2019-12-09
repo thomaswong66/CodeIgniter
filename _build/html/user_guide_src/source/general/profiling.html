@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Profiling Your Application &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="profiling-your-application">
+<h1>Profiling Your Application<a class="headerlink" href="#profiling-your-application" title="Permalink to this headline">¶</a></h1>
+<p>The Profiler Class will display benchmark results, queries you have run,
+and <code class="docutils literal notranslate"><span class="pre">$_POST</span></code> data at the bottom of your pages. This information can be
+useful during development in order to help with debugging and
+optimization.</p>
+<div class="section" id="initializing-the-class">
+<h2>Initializing the Class<a class="headerlink" href="#initializing-the-class" title="Permalink to this headline">¶</a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This class does NOT need to be initialized. It is loaded
+automatically by the <a class="reference internal" href="../libraries/output.html"><span class="doc">Output Library</span></a>
+if profiling is enabled as shown below.</p>
+</div>
+</div>
+<div class="section" id="enabling-the-profiler">
+<h2>Enabling the Profiler<a class="headerlink" href="#enabling-the-profiler" title="Permalink to this headline">¶</a></h2>
+<p>To enable the profiler place the following line anywhere within your
+<a class="reference internal" href="controllers.html"><span class="doc">Controller</span></a> methods:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;output-&gt;enable_profiler(TRUE);
+</pre></div>
+</div>
+<p>When enabled a report will be generated and inserted at the bottom of
+your pages.</p>
+<p>To disable the profiler you will use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;output-&gt;enable_profiler(FALSE);
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-benchmark-points">
+<h2>Setting Benchmark Points<a class="headerlink" href="#setting-benchmark-points" title="Permalink to this headline">¶</a></h2>
+<p>In order for the Profiler to compile and display your benchmark data you
+must name your mark points using specific syntax.</p>
+<p>Please read the information on setting Benchmark points in the
+<a class="reference internal" href="../libraries/benchmark.html"><span class="doc">Benchmark Library</span></a> page.</p>
+</div>
+<div class="section" id="enabling-and-disabling-profiler-sections">
+<h2>Enabling and Disabling Profiler Sections<a class="headerlink" href="#enabling-and-disabling-profiler-sections" title="Permalink to this headline">¶</a></h2>
+<p>Each section of Profiler data can be enabled or disabled by setting a
+corresponding config variable to TRUE or FALSE. This can be done one of
+two ways. First, you can set application wide defaults with the
+<em>application/config/profiler.php</em> config file.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$config[&#39;config&#39;]          = FALSE;
+$config[&#39;queries&#39;]         = FALSE;
+</pre></div>
+</div>
+<p>In your controllers, you can override the defaults and config file
+values by calling the <code class="docutils literal notranslate"><span class="pre">set_profiler_sections()</span></code> method of the
+<a class="reference internal" href="../libraries/output.html"><span class="doc">Output Library</span></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$sections = array(
+        &#39;config&#39;  =&gt; TRUE,
+        &#39;queries&#39; =&gt; TRUE
+);
+
+$this-&gt;output-&gt;set_profiler_sections($sections);
+</pre></div>
+</div>
+<p>Available sections and the array key used to access them are described
+in the table below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 68%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>benchmarks</strong></p></td>
+<td><p>Elapsed time of Benchmark points and total execution time</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>config</strong></p></td>
+<td><p>CodeIgniter Config variables</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>controller_info</strong></p></td>
+<td><p>The Controller class and method requested</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get</strong></p></td>
+<td><p>Any GET data passed in the request</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>http_headers</strong></p></td>
+<td><p>The HTTP headers for the current request</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>memory_usage</strong></p></td>
+<td><p>Amount of memory consumed by the current request, in bytes</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>post</strong></p></td>
+<td><p>Any POST data passed in the request</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>queries</strong></p></td>
+<td><p>Listing of all database queries executed, including execution time</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>uri_string</strong></p></td>
+<td><p>The URI of the current request</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>session_data</strong></p></td>
+<td><p>Data stored in the current session</p></td>
+<td><p>TRUE</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>query_toggle_count</strong></p></td>
+<td><p>The number of queries after which the query block will default to
+hidden.</p></td>
+<td><p>25</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Disabling the <span class="xref std std-doc">save_queries</span> setting in
+your database configuration will also effectively disable profiling for
+database queries and render the ‘queries’ setting above useless. You can
+optionally override this setting with <code class="docutils literal notranslate"><span class="pre">$this-&gt;db-&gt;save_queries</span> <span class="pre">=</span> <span class="pre">TRUE;</span></code>.
+Without this setting you won’t be able to view the queries or the
+<cite>last_query &lt;database/helpers&gt;</cite>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Profiling Your Application</a><ul>
+<li><a class="reference internal" href="#initializing-the-class">Initializing the Class</a></li>
+<li><a class="reference internal" href="#enabling-the-profiler">Enabling the Profiler</a></li>
+<li><a class="reference internal" href="#setting-benchmark-points">Setting Benchmark Points</a></li>
+<li><a class="reference internal" href="#enabling-and-disabling-profiler-sections">Enabling and Disabling Profiler Sections</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/general/profiling.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

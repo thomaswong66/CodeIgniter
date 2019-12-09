@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hooks - Extending the Framework Core &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hooks-extending-the-framework-core">
+<h1>Hooks - Extending the Framework Core<a class="headerlink" href="#hooks-extending-the-framework-core" title="Permalink to this headline">¶</a></h1>
+<p>CodeIgniter’s Hooks feature provides a means to tap into and modify the
+inner workings of the framework without hacking the core files. When
+CodeIgniter runs it follows a specific execution process, diagramed in
+the <a class="reference internal" href="../overview/appflow.html"><span class="doc">Application Flow</span></a> page. There may be
+instances, however, where you’d like to cause some action to take place
+at a particular stage in the execution process. For example, you might
+want to run a script right before your controllers get loaded, or right
+after, or you might want to trigger one of your own scripts in some
+other location.</p>
+<div class="section" id="enabling-hooks">
+<h2>Enabling Hooks<a class="headerlink" href="#enabling-hooks" title="Permalink to this headline">¶</a></h2>
+<p>The hooks feature can be globally enabled/disabled by setting the
+following item in the <strong>application/config/config.php</strong> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$config[&#39;enable_hooks&#39;] = TRUE;
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-a-hook">
+<h2>Defining a Hook<a class="headerlink" href="#defining-a-hook" title="Permalink to this headline">¶</a></h2>
+<p>Hooks are defined in the <strong>application/config/hooks.php</strong> file.
+Each hook is specified as an array with this prototype:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$hook[&#39;pre_controller&#39;] = array(
+        &#39;class&#39;    =&gt; &#39;MyClass&#39;,
+        &#39;function&#39; =&gt; &#39;Myfunction&#39;,
+        &#39;filename&#39; =&gt; &#39;Myclass.php&#39;,
+        &#39;filepath&#39; =&gt; &#39;hooks&#39;,
+        &#39;params&#39;   =&gt; array(&#39;beer&#39;, &#39;wine&#39;, &#39;snacks&#39;)
+);
+</pre></div>
+</div>
+<p><strong>Notes:</strong></p>
+<p>The array index correlates to the name of the particular hook point you
+want to use. In the above example the hook point is pre_controller. A
+list of hook points is found below. The following items should be
+defined in your associative hook array:</p>
+<ul class="simple">
+<li><p><strong>class</strong> The name of the class you wish to invoke. If you prefer to
+use a procedural function instead of a class, leave this item blank.</p></li>
+<li><p><strong>function</strong> The function (or method) name you wish to call.</p></li>
+<li><p><strong>filename</strong> The file name containing your class/function.</p></li>
+<li><p><strong>filepath</strong> The name of the directory containing your script.
+Note:
+Your script must be located in a directory INSIDE your <em>application/</em>
+directory, so the file path is relative to that directory. For example,
+if your script is located in <em>application/hooks/</em>, you will simply use
+‘hooks’ as your filepath. If your script is located in
+<em>application/hooks/utilities/</em> you will use ‘hooks/utilities’ as your
+filepath. No trailing slash.</p></li>
+<li><p><strong>params</strong> Any parameters you wish to pass to your script. This item
+is optional.</p></li>
+</ul>
+<p>You can also use lambda/anoymous functions (or closures) as hooks, with
+a simpler syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$hook[&#39;post_controller&#39;] = function()
+{
+        /* do something here */
+};
+</pre></div>
+</div>
+</div>
+<div class="section" id="multiple-calls-to-the-same-hook">
+<h2>Multiple Calls to the Same Hook<a class="headerlink" href="#multiple-calls-to-the-same-hook" title="Permalink to this headline">¶</a></h2>
+<p>If want to use the same hook point with more than one script, simply
+make your array declaration multi-dimensional, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$hook[&#39;pre_controller&#39;][] = array(
+        &#39;class&#39;    =&gt; &#39;MyClass&#39;,
+        &#39;function&#39; =&gt; &#39;MyMethod&#39;,
+        &#39;filename&#39; =&gt; &#39;Myclass.php&#39;,
+        &#39;filepath&#39; =&gt; &#39;hooks&#39;,
+        &#39;params&#39;   =&gt; array(&#39;beer&#39;, &#39;wine&#39;, &#39;snacks&#39;)
+);
+
+$hook[&#39;pre_controller&#39;][] = array(
+        &#39;class&#39;    =&gt; &#39;MyOtherClass&#39;,
+        &#39;function&#39; =&gt; &#39;MyOtherMethod&#39;,
+        &#39;filename&#39; =&gt; &#39;Myotherclass.php&#39;,
+        &#39;filepath&#39; =&gt; &#39;hooks&#39;,
+        &#39;params&#39;   =&gt; array(&#39;red&#39;, &#39;yellow&#39;, &#39;blue&#39;)
+);
+</pre></div>
+</div>
+<p>Notice the brackets after each array index:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$hook[&#39;pre_controller&#39;][]
+</pre></div>
+</div>
+<p>This permits you to have the same hook point with multiple scripts. The
+order you define your array will be the execution order.</p>
+</div>
+<div class="section" id="hook-points">
+<h2>Hook Points<a class="headerlink" href="#hook-points" title="Permalink to this headline">¶</a></h2>
+<p>The following is a list of available hook points.</p>
+<ul class="simple">
+<li><p><strong>pre_system</strong>
+Called very early during system execution. Only the benchmark and
+hooks class have been loaded at this point. No routing or other
+processes have happened.</p></li>
+<li><p><strong>pre_controller</strong>
+Called immediately prior to any of your controllers being called.
+All base classes, routing, and security checks have been done.</p></li>
+<li><p><strong>post_controller_constructor</strong>
+Called immediately after your controller is instantiated, but prior
+to any method calls happening.</p></li>
+<li><p><strong>post_controller</strong>
+Called immediately after your controller is fully executed.</p></li>
+<li><p><strong>display_override</strong>
+Overrides the <code class="docutils literal notranslate"><span class="pre">_display()</span></code> method, used to send the finalized page
+to the web browser at the end of system execution. This permits you
+to use your own display methodology. Note that you will need to
+reference the CI superobject with <code class="docutils literal notranslate"><span class="pre">$this-&gt;CI</span> <span class="pre">=&amp;</span> <span class="pre">get_instance()</span></code> and
+then the finalized data will be available by calling
+<code class="docutils literal notranslate"><span class="pre">$this-&gt;CI-&gt;output-&gt;get_output()</span></code>.</p></li>
+<li><p><strong>cache_override</strong>
+Enables you to call your own method instead of the <code class="docutils literal notranslate"><span class="pre">_display_cache()</span></code>
+method in the <a class="reference internal" href="../libraries/output.html"><span class="doc">Output Library</span></a>. This permits
+you to use your own cache display mechanism.</p></li>
+<li><p><strong>post_system</strong>
+Called after the final rendered page is sent to the browser, at the
+end of system execution after the finalized data is sent to the
+browser.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hooks - Extending the Framework Core</a><ul>
+<li><a class="reference internal" href="#enabling-hooks">Enabling Hooks</a></li>
+<li><a class="reference internal" href="#defining-a-hook">Defining a Hook</a></li>
+<li><a class="reference internal" href="#multiple-calls-to-the-same-hook">Multiple Calls to the Same Hook</a></li>
+<li><a class="reference internal" href="#hook-points">Hook Points</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/general/hooks.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

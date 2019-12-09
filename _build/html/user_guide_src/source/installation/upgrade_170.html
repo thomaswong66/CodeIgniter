@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Upgrading from 1.6.3 to 1.7.0 &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="upgrading-from-1-6-3-to-1-7-0">
+<h1>Upgrading from 1.6.3 to 1.7.0<a class="headerlink" href="#upgrading-from-1-6-3-to-1-7-0" title="Permalink to this headline">¶</a></h1>
+<p>Before performing an update you should take your site offline by
+replacing the index.php file with a static one.</p>
+<div class="section" id="step-1-update-your-codeigniter-files">
+<h2>Step 1: Update your CodeIgniter files<a class="headerlink" href="#step-1-update-your-codeigniter-files" title="Permalink to this headline">¶</a></h2>
+<p>Replace these files and directories in your “system” folder with the new
+versions:</p>
+<ul class="simple">
+<li><p>system/codeigniter</p></li>
+<li><p>system/database</p></li>
+<li><p>system/helpers</p></li>
+<li><p>system/language</p></li>
+<li><p>system/libraries</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have any custom developed files in these folders please
+make copies of them first.</p>
+</div>
+</div>
+<div class="section" id="step-2-update-your-session-table">
+<h2>Step 2: Update your Session Table<a class="headerlink" href="#step-2-update-your-session-table" title="Permalink to this headline">¶</a></h2>
+<p>If you are using the Session class in your application, AND if you are
+storing session data to a database, you must add a new column named
+user_data to your session table. Here is an example of what this column
+might look like for MySQL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">user_data</span> <span class="n">text</span> <span class="n">NOT</span> <span class="n">NULL</span>
+</pre></div>
+</div>
+<p>To add this column you will run a query similar to this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ALTER TABLE `ci_sessions` ADD `user_data` text NOT NULL
+</pre></div>
+</div>
+<p>You’ll find more information regarding the new Session functionality in
+the <a class="reference internal" href="../libraries/sessions.html"><span class="doc">Session class</span></a> page.</p>
+</div>
+<div class="section" id="step-3-update-your-validation-syntax">
+<h2>Step 3: Update your Validation Syntax<a class="headerlink" href="#step-3-update-your-validation-syntax" title="Permalink to this headline">¶</a></h2>
+<p>This is an <strong>optional</strong>, but recommended step, for people currently
+using the Validation class. CI 1.7 introduces a new <a class="reference internal" href="../libraries/form_validation.html"><span class="doc">Form Validation
+class</span></a>, which deprecates the old
+Validation library. We have left the old one in place so that existing
+applications that use it will not break, but you are encouraged to
+migrate to the new version as soon as possible. Please read the user
+guide carefully as the new library works a little differently, and has
+several new features.</p>
+</div>
+<div class="section" id="step-4-update-your-user-guide">
+<h2>Step 4: Update your user guide<a class="headerlink" href="#step-4-update-your-user-guide" title="Permalink to this headline">¶</a></h2>
+<p>Please replace your local copy of the user guide with the new version,
+including the image files.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Upgrading from 1.6.3 to 1.7.0</a><ul>
+<li><a class="reference internal" href="#step-1-update-your-codeigniter-files">Step 1: Update your CodeIgniter files</a></li>
+<li><a class="reference internal" href="#step-2-update-your-session-table">Step 2: Update your Session Table</a></li>
+<li><a class="reference internal" href="#step-3-update-your-validation-syntax">Step 3: Update your Validation Syntax</a></li>
+<li><a class="reference internal" href="#step-4-update-your-user-guide">Step 4: Update your user guide</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/installation/upgrade_170.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

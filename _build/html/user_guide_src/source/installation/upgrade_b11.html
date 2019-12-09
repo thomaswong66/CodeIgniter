@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Upgrading From Beta 1.0 to Beta 1.1 &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="upgrading-from-beta-1-0-to-beta-1-1">
+<h1>Upgrading From Beta 1.0 to Beta 1.1<a class="headerlink" href="#upgrading-from-beta-1-0-to-beta-1-1" title="Permalink to this headline">¶</a></h1>
+<p>To upgrade to Beta 1.1 please perform the following steps:</p>
+<div class="section" id="step-1-replace-your-index-file">
+<h2>Step 1: Replace your index file<a class="headerlink" href="#step-1-replace-your-index-file" title="Permalink to this headline">¶</a></h2>
+<p>Replace your main index.php file with the new index.php file. Note: If
+you have renamed your “system” folder you will need to edit this info in
+the new file.</p>
+</div>
+<div class="section" id="step-2-relocate-your-config-folder">
+<h2>Step 2: Relocate your config folder<a class="headerlink" href="#step-2-relocate-your-config-folder" title="Permalink to this headline">¶</a></h2>
+<p>This version of CodeIgniter now permits multiple sets of “applications”
+to all share a common set of backend files. In order to enable each
+application to have its own configuration values, the config directory
+must now reside inside of your application folder, so please move it
+there.</p>
+</div>
+<div class="section" id="step-3-replace-directories">
+<h2>Step 3: Replace directories<a class="headerlink" href="#step-3-replace-directories" title="Permalink to this headline">¶</a></h2>
+<p>Replace the following directories with the new versions:</p>
+<ul class="simple">
+<li><p>drivers</p></li>
+<li><p>helpers</p></li>
+<li><p>init</p></li>
+<li><p>libraries</p></li>
+<li><p>scaffolding</p></li>
+</ul>
+</div>
+<div class="section" id="step-4-add-the-calendar-language-file">
+<h2>Step 4: Add the calendar language file<a class="headerlink" href="#step-4-add-the-calendar-language-file" title="Permalink to this headline">¶</a></h2>
+<p>There is a new language file corresponding to the new calendaring class
+which must be added to your language folder. Add the following item to
+your version: language/english/calendar_lang.php</p>
+</div>
+<div class="section" id="step-5-edit-your-config-file">
+<h2>Step 5: Edit your config file<a class="headerlink" href="#step-5-edit-your-config-file" title="Permalink to this headline">¶</a></h2>
+<p>The original application/config/config.php file has a typo in it Open
+the file and look for the items related to cookies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$conf[&#39;cookie_prefix&#39;]  = &quot;&quot;;
+$conf[&#39;cookie_domain&#39;]  = &quot;&quot;;
+$conf[&#39;cookie_path&#39;]    = &quot;/&quot;;
+</pre></div>
+</div>
+<p>Change the array name from $conf to $config, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$config[&#39;cookie_prefix&#39;]        = &quot;&quot;;
+$config[&#39;cookie_domain&#39;]        = &quot;&quot;;
+$config[&#39;cookie_path&#39;]  = &quot;/&quot;;
+</pre></div>
+</div>
+<p>Lastly, add the following new item to the config file (and edit the
+option if needed):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/*
+|------------------------------------------------
+| URI PROTOCOL
+|------------------------------------------------
+|
+| This item determines which server global
+| should be used to retrieve the URI string. The
+| default setting of &quot;auto&quot; works for most servers.
+| If your links do not seem to work, try one of
+| the other delicious flavors:
+|
+| &#39;auto&#39;         Default - auto detects
+| &#39;path_info&#39;    Uses the PATH_INFO
+| &#39;query_string&#39;        Uses the QUERY_STRING
+*/
+
+$config[&#39;uri_protocol&#39;] = &quot;auto&quot;;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Upgrading From Beta 1.0 to Beta 1.1</a><ul>
+<li><a class="reference internal" href="#step-1-replace-your-index-file">Step 1: Replace your index file</a></li>
+<li><a class="reference internal" href="#step-2-relocate-your-config-folder">Step 2: Relocate your config folder</a></li>
+<li><a class="reference internal" href="#step-3-replace-directories">Step 3: Replace directories</a></li>
+<li><a class="reference internal" href="#step-4-add-the-calendar-language-file">Step 4: Add the calendar language file</a></li>
+<li><a class="reference internal" href="#step-5-edit-your-config-file">Step 5: Edit your config file</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/installation/upgrade_b11.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Image Manipulation Class &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="image-manipulation-class">
+<h1>Image Manipulation Class<a class="headerlink" href="#image-manipulation-class" title="Permalink to this headline">¶</a></h1>
+<p>CodeIgniter’s Image Manipulation class lets you perform the following
+actions:</p>
+<ul class="simple">
+<li><p>Image Resizing</p></li>
+<li><p>Thumbnail Creation</p></li>
+<li><p>Image Cropping</p></li>
+<li><p>Image Rotating</p></li>
+<li><p>Image Watermarking</p></li>
+</ul>
+<p>All three major image libraries are supported: GD/GD2, NetPBM, and
+ImageMagick</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Watermarking is only available using the GD/GD2 library. In
+addition, even though other libraries are supported, GD is required in
+order for the script to calculate the image properties. The image
+processing, however, will be performed with the library you specify.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#initializing-the-class" id="id1">Initializing the Class</a></p>
+<ul>
+<li><p><a class="reference internal" href="#processing-an-image" id="id2">Processing an Image</a></p></li>
+<li><p><a class="reference internal" href="#processing-methods" id="id3">Processing Methods</a></p></li>
+<li><p><a class="reference internal" href="#preferences" id="id4">Preferences</a></p></li>
+<li><p><a class="reference internal" href="#setting-preferences-in-a-config-file" id="id5">Setting preferences in a config file</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#image-watermarking" id="id6">Image Watermarking</a></p>
+<ul>
+<li><p><a class="reference internal" href="#two-types-of-watermarking" id="id7">Two Types of Watermarking</a></p></li>
+<li><p><a class="reference internal" href="#watermarking-an-image" id="id8">Watermarking an Image</a></p></li>
+<li><p><a class="reference internal" href="#watermarking-preferences" id="id9">Watermarking Preferences</a></p>
+<ul>
+<li><p><a class="reference internal" href="#text-preferences" id="id10">Text Preferences</a></p></li>
+<li><p><a class="reference internal" href="#overlay-preferences" id="id11">Overlay Preferences</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#class-reference" id="id12">Class Reference</a></p></li>
+</ul>
+</div>
+<div class="custom-index container"></div><div class="section" id="initializing-the-class">
+<h2><a class="toc-backref" href="#id1">Initializing the Class</a><a class="headerlink" href="#initializing-the-class" title="Permalink to this headline">¶</a></h2>
+<p>Like most other classes in CodeIgniter, the image class is initialized
+in your controller using the $this-&gt;load-&gt;library function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;load-&gt;library(&#39;image_lib&#39;);
+</pre></div>
+</div>
+<p>Once the library is loaded it will be ready for use. The image library
+object you will use to call all functions is: <code class="docutils literal notranslate"><span class="pre">$this-&gt;image_lib</span></code></p>
+<div class="section" id="processing-an-image">
+<h3><a class="toc-backref" href="#id2">Processing an Image</a><a class="headerlink" href="#processing-an-image" title="Permalink to this headline">¶</a></h3>
+<p>Regardless of the type of processing you would like to perform
+(resizing, cropping, rotation, or watermarking), the general process is
+identical. You will set some preferences corresponding to the action you
+intend to perform, then call one of four available processing functions.
+For example, to create an image thumbnail you’ll do this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$config[&#39;image_library&#39;] = &#39;gd2&#39;;
+$config[&#39;source_image&#39;] = &#39;/path/to/image/mypic.jpg&#39;;
+$config[&#39;create_thumb&#39;] = TRUE;
+$config[&#39;maintain_ratio&#39;] = TRUE;
+$config[&#39;width&#39;]         = 75;
+$config[&#39;height&#39;]       = 50;
+
+$this-&gt;load-&gt;library(&#39;image_lib&#39;, $config);
+
+$this-&gt;image_lib-&gt;resize();
+</pre></div>
+</div>
+<p>The above code tells the image_resize function to look for an image
+called <em>mypic.jpg</em> located in the source_image folder, then create a
+thumbnail that is 75 X 50 pixels using the GD2 image_library. Since the
+maintain_ratio option is enabled, the thumb will be as close to the
+target width and height as possible while preserving the original aspect
+ratio. The thumbnail will be called <em>mypic_thumb.jpg</em> and located at
+the same level as <em>source_image</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order for the image class to be allowed to do any
+processing, the folder containing the image files must have write
+permissions.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Image processing can require a considerable amount of server
+memory for some operations. If you are experiencing out of memory errors
+while processing images you may need to limit their maximum size, and/or
+adjust PHP memory limits.</p>
+</div>
+</div>
+<div class="section" id="processing-methods">
+<h3><a class="toc-backref" href="#id3">Processing Methods</a><a class="headerlink" href="#processing-methods" title="Permalink to this headline">¶</a></h3>
+<p>There are four available processing methods:</p>
+<ul class="simple">
+<li><p>$this-&gt;image_lib-&gt;resize()</p></li>
+<li><p>$this-&gt;image_lib-&gt;crop()</p></li>
+<li><p>$this-&gt;image_lib-&gt;rotate()</p></li>
+<li><p>$this-&gt;image_lib-&gt;watermark()</p></li>
+</ul>
+<p>These methods return boolean TRUE upon success and FALSE for failure.
+If they fail you can retrieve the error message using this function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo $this-&gt;image_lib-&gt;display_errors();
+</pre></div>
+</div>
+<p>A good practice is to use the processing function conditionally, showing an
+error upon failure, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>if ( ! $this-&gt;image_lib-&gt;resize())
+{
+        echo $this-&gt;image_lib-&gt;display_errors();
+}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can optionally specify the HTML formatting to be applied to
+the errors, by submitting the opening/closing tags in the function,
+like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;image_lib-&gt;display_errors(&#39;&lt;p&gt;&#39;, &#39;&lt;/p&gt;&#39;);
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="preferences">
+<span id="processing-preferences"></span><h3><a class="toc-backref" href="#id4">Preferences</a><a class="headerlink" href="#preferences" title="Permalink to this headline">¶</a></h3>
+<p>The preferences described below allow you to tailor the image processing
+to suit your needs.</p>
+<p>Note that not all preferences are available for every function. For
+example, the x/y axis preferences are only available for image cropping.
+Likewise, the width and height preferences have no effect on cropping.
+The “availability” column indicates which functions support a given
+preference.</p>
+<p>Availability Legend:</p>
+<ul class="simple">
+<li><p>R - Image Resizing</p></li>
+<li><p>C - Image Cropping</p></li>
+<li><p>X - Image Rotation</p></li>
+<li><p>W - Image Watermarking</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 19%" />
+<col style="width: 45%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Preference</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Options</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Availability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>image_library</strong></p></td>
+<td><p>GD2</p></td>
+<td><p>GD, GD2, ImageMagick, NetPBM</p></td>
+<td><p>Sets the image library to be used.</p></td>
+<td><p>R, C, X, W</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>library_path</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the server path to your ImageMagick or NetPBM library. If you use
+either of those libraries you must supply the path.</p></td>
+<td><p>R, C, X
+R, C, S, W</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>source_image</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the source image name/path. The path must be a relative or absolute
+server path, not a URL.</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>dynamic_output</strong></p></td>
+<td><p>FALSE</p></td>
+<td><p>TRUE/FALSE (boolean)</p></td>
+<td><p>Determines whether the new image file should be written to disk or
+generated dynamically. Note: If you choose the dynamic setting, only one
+image can be shown at a time, and it can’t be positioned on the page. It
+simply outputs the raw image dynamically to your browser, along with
+image headers.</p></td>
+<td><p>R, C, X, W</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>file_permissions</strong></p></td>
+<td><p>0644</p></td>
+<td><p>(integer)</p></td>
+<td><p>File system permissions to apply on the resulting image file,
+writing it to the disk. WARNING: Use octal integer notation!</p></td>
+<td><p>R, C, X, W</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>quality</strong></p></td>
+<td><p>90%</p></td>
+<td><p>1 - 100%</p></td>
+<td><p>Sets the quality of the image. The higher the quality the larger the
+file size.</p></td>
+<td><p>R, C, X, W</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>new_image</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the destination image name/path. You’ll use this preference when
+creating an image copy. The path must be a relative or absolute server
+path, not a URL.</p></td>
+<td><p>R, C, X, W</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>width</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the width you would like the image set to.</p></td>
+<td><p>R, C</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>height</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the height you would like the image set to.</p></td>
+<td><p>R, C</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>create_thumb</strong></p></td>
+<td><p>FALSE</p></td>
+<td><p>TRUE/FALSE (boolean)</p></td>
+<td><p>Tells the image processing function to create a thumb.</p></td>
+<td><p>R</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>thumb_marker</strong></p></td>
+<td><p>_thumb</p></td>
+<td><p>None</p></td>
+<td><p>Specifies the thumbnail indicator. It will be inserted just before the
+file extension, so mypic.jpg would become mypic_thumb.jpg</p></td>
+<td><p>R</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>maintain_ratio</strong></p></td>
+<td><p>TRUE</p></td>
+<td><p>TRUE/FALSE (boolean)</p></td>
+<td><p>Specifies whether to maintain the original aspect ratio when resizing or
+use hard values.</p></td>
+<td><p>R, C</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>master_dim</strong></p></td>
+<td><p>auto</p></td>
+<td><p>auto, width, height</p></td>
+<td><p>Specifies what to use as the master axis when resizing or creating
+thumbs. For example, let’s say you want to resize an image to 100 X 75
+pixels. If the source image size does not allow perfect resizing to
+those dimensions, this setting determines which axis should be used as
+the hard value. “auto” sets the axis automatically based on whether the
+image is taller than wider, or vice versa.</p></td>
+<td><p>R</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>rotation_angle</strong></p></td>
+<td><p>None</p></td>
+<td><p>90, 180, 270, vrt, hor</p></td>
+<td><p>Specifies the angle of rotation when rotating images. Note that PHP
+rotates counter-clockwise, so a 90 degree rotation to the right must be
+specified as 270.</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>x_axis</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the X coordinate in pixels for image cropping. For example, a
+setting of 30 will crop an image 30 pixels from the left.</p></td>
+<td><p>C</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>y_axis</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the Y coordinate in pixels for image cropping. For example, a
+setting of 30 will crop an image 30 pixels from the top.</p></td>
+<td><p>C</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="setting-preferences-in-a-config-file">
+<h3><a class="toc-backref" href="#id5">Setting preferences in a config file</a><a class="headerlink" href="#setting-preferences-in-a-config-file" title="Permalink to this headline">¶</a></h3>
+<p>If you prefer not to set preferences using the above method, you can
+instead put them into a config file. Simply create a new file called
+image_lib.php, add the $config array in that file. Then save the file
+in <em>config/image_lib.php</em> and it will be used automatically. You will
+NOT need to use the <code class="docutils literal notranslate"><span class="pre">$this-&gt;image_lib-&gt;initialize()</span></code> method if you save
+your preferences in a config file.</p>
+</div>
+</div>
+<div class="section" id="image-watermarking">
+<h2><a class="toc-backref" href="#id6">Image Watermarking</a><a class="headerlink" href="#image-watermarking" title="Permalink to this headline">¶</a></h2>
+<p>The Watermarking feature requires the GD/GD2 library.</p>
+<div class="section" id="two-types-of-watermarking">
+<h3><a class="toc-backref" href="#id7">Two Types of Watermarking</a><a class="headerlink" href="#two-types-of-watermarking" title="Permalink to this headline">¶</a></h3>
+<p>There are two types of watermarking that you can use:</p>
+<ul class="simple">
+<li><p><strong>Text</strong>: The watermark message will be generated using text, either
+with a True Type font that you specify, or using the native text
+output that the GD library supports. If you use the True Type version
+your GD installation must be compiled with True Type support (most
+are, but not all).</p></li>
+<li><p><strong>Overlay</strong>: The watermark message will be generated by overlaying an
+image (usually a transparent PNG or GIF) containing your watermark
+over the source image.</p></li>
+</ul>
+</div>
+<div class="section" id="watermarking-an-image">
+<span id="watermarking"></span><h3><a class="toc-backref" href="#id8">Watermarking an Image</a><a class="headerlink" href="#watermarking-an-image" title="Permalink to this headline">¶</a></h3>
+<p>Just as with the other methods (resizing, cropping, and rotating) the
+general process for watermarking involves setting the preferences
+corresponding to the action you intend to perform, then calling the
+watermark function. Here is an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$config[&#39;source_image&#39;] = &#39;/path/to/image/mypic.jpg&#39;;
+$config[&#39;wm_text&#39;] = &#39;Copyright 2006 - John Doe&#39;;
+$config[&#39;wm_type&#39;] = &#39;text&#39;;
+$config[&#39;wm_font_path&#39;] = &#39;./system/fonts/texb.ttf&#39;;
+$config[&#39;wm_font_size&#39;] = &#39;16&#39;;
+$config[&#39;wm_font_color&#39;] = &#39;ffffff&#39;;
+$config[&#39;wm_vrt_alignment&#39;] = &#39;bottom&#39;;
+$config[&#39;wm_hor_alignment&#39;] = &#39;center&#39;;
+$config[&#39;wm_padding&#39;] = &#39;20&#39;;
+
+$this-&gt;image_lib-&gt;initialize($config);
+
+$this-&gt;image_lib-&gt;watermark();
+</pre></div>
+</div>
+<p>The above example will use a 16 pixel True Type font to create the text
+“Copyright 2006 - John Doe”. The watermark will be positioned at the
+bottom/center of the image, 20 pixels from the bottom of the image.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order for the image class to be allowed to do any
+processing, the image file must have “write” file permissions
+For example, 777.</p>
+</div>
+</div>
+<div class="section" id="watermarking-preferences">
+<h3><a class="toc-backref" href="#id9">Watermarking Preferences</a><a class="headerlink" href="#watermarking-preferences" title="Permalink to this headline">¶</a></h3>
+<p>This table shows the preferences that are available for both types of
+watermarking (text or overlay)</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Preference</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Options</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>wm_type</strong></p></td>
+<td><p>text</p></td>
+<td><p>text, overlay</p></td>
+<td><p>Sets the type of watermarking that should be used.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>source_image</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Sets the source image name/path. The path must be a relative or absolute
+server path, not a URL.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>dynamic_output</strong></p></td>
+<td><p>FALSE</p></td>
+<td><p>TRUE/FALSE (boolean)</p></td>
+<td><p>Determines whether the new image file should be written to disk or
+generated dynamically. Note: If you choose the dynamic setting, only one
+image can be shown at a time, and it can’t be positioned on the page. It
+simply outputs the raw image dynamically to your browser, along with
+image headers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>quality</strong></p></td>
+<td><p>90%</p></td>
+<td><p>1 - 100%</p></td>
+<td><p>Sets the quality of the image. The higher the quality the larger the
+file size.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>wm_padding</strong></p></td>
+<td><p>None</p></td>
+<td><p>A number</p></td>
+<td><p>The amount of padding, set in pixels, that will be applied to the
+watermark to set it away from the edge of your images.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>wm_vrt_alignment</strong></p></td>
+<td><p>bottom</p></td>
+<td><p>top, middle, bottom</p></td>
+<td><p>Sets the vertical alignment for the watermark image.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>wm_hor_alignment</strong></p></td>
+<td><p>center</p></td>
+<td><p>left, center, right</p></td>
+<td><p>Sets the horizontal alignment for the watermark image.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>wm_hor_offset</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>You may specify a horizontal offset (in pixels) to apply to the
+watermark position. The offset normally moves the watermark to the
+right, except if you have your alignment set to “right” then your offset
+value will move the watermark toward the left of the image.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>wm_vrt_offset</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>You may specify a vertical offset (in pixels) to apply to the watermark
+position. The offset normally moves the watermark down, except if you
+have your alignment set to “bottom” then your offset value will move the
+watermark toward the top of the image.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="text-preferences">
+<h4><a class="toc-backref" href="#id10">Text Preferences</a><a class="headerlink" href="#text-preferences" title="Permalink to this headline">¶</a></h4>
+<p>This table shows the preferences that are available for the text type of
+watermarking.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Preference</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Options</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>wm_text</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>The text you would like shown as the watermark. Typically this will be a
+copyright notice.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>wm_font_path</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>The server path to the True Type Font you would like to use. If you do
+not use this option, the native GD font will be used.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>wm_font_size</strong></p></td>
+<td><p>16</p></td>
+<td><p>None</p></td>
+<td><p>The size of the text. Note: If you are not using the True Type option
+above, the number is set using a range of 1 - 5. Otherwise, you can use
+any valid pixel size for the font you’re using.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>wm_font_color</strong></p></td>
+<td><p>ffffff</p></td>
+<td><p>None</p></td>
+<td><p>The font color, specified in hex. Both the full 6-length (ie, 993300) and
+the short three character abbreviated version (ie, fff) are supported.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>wm_shadow_color</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>The color of the drop shadow, specified in hex. If you leave this blank
+a drop shadow will not be used. Both the full 6-length (ie, 993300) and
+the short three character abbreviated version (ie, fff) are supported.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>wm_shadow_distance</strong></p></td>
+<td><p>2</p></td>
+<td><p>None</p></td>
+<td><p>The distance (in pixels) from the font that the drop shadow should
+appear.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="overlay-preferences">
+<h4><a class="toc-backref" href="#id11">Overlay Preferences</a><a class="headerlink" href="#overlay-preferences" title="Permalink to this headline">¶</a></h4>
+<p>This table shows the preferences that are available for the overlay type
+of watermarking.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Preference</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Options</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>wm_overlay_path</strong></p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>The server path to the image you wish to use as your watermark. Required
+only if you are using the overlay method.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>wm_opacity</strong></p></td>
+<td><p>50</p></td>
+<td><p>1 - 100</p></td>
+<td><p>Image opacity. You may specify the opacity (i.e. transparency) of your
+watermark image. This allows the watermark to be faint and not
+completely obscure the details from the original image behind it. A 50%
+opacity is typical.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>wm_x_transp</strong></p></td>
+<td><p>4</p></td>
+<td><p>A number</p></td>
+<td><p>If your watermark image is a PNG or GIF image, you may specify a color
+on the image to be “transparent”. This setting (along with the next)
+will allow you to specify that color. This works by specifying the “X”
+and “Y” coordinate pixel (measured from the upper left) within the image
+that corresponds to a pixel representative of the color you want to be
+transparent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>wm_y_transp</strong></p></td>
+<td><p>4</p></td>
+<td><p>A number</p></td>
+<td><p>Along with the previous setting, this allows you to specify the
+coordinate to a pixel representative of the color you want to be
+transparent.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="class-reference">
+<h2><a class="toc-backref" href="#id12">Class Reference</a><a class="headerlink" href="#class-reference" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Image Manipulation Class</a><ul>
+<li><a class="reference internal" href="#initializing-the-class">Initializing the Class</a><ul>
+<li><a class="reference internal" href="#processing-an-image">Processing an Image</a></li>
+<li><a class="reference internal" href="#processing-methods">Processing Methods</a></li>
+<li><a class="reference internal" href="#preferences">Preferences</a></li>
+<li><a class="reference internal" href="#setting-preferences-in-a-config-file">Setting preferences in a config file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#image-watermarking">Image Watermarking</a><ul>
+<li><a class="reference internal" href="#two-types-of-watermarking">Two Types of Watermarking</a></li>
+<li><a class="reference internal" href="#watermarking-an-image">Watermarking an Image</a></li>
+<li><a class="reference internal" href="#watermarking-preferences">Watermarking Preferences</a><ul>
+<li><a class="reference internal" href="#text-preferences">Text Preferences</a></li>
+<li><a class="reference internal" href="#overlay-preferences">Overlay Preferences</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-reference">Class Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/libraries/image_lib.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

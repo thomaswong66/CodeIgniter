@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Migrations Class &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="migrations-class">
+<h1>Migrations Class<a class="headerlink" href="#migrations-class" title="Permalink to this headline">¶</a></h1>
+<p>Migrations are a convenient way for you to alter your database in a
+structured and organized manner. You could edit fragments of SQL by hand
+but you would then be responsible for telling other developers that they
+need to go and run them. You would also have to keep track of which changes
+need to be run against the production machines next time you deploy.</p>
+<p>The database table <strong>migration</strong> tracks which migrations have already been
+run so all you have to do is update your application files and
+call <code class="docutils literal notranslate"><span class="pre">$this-&gt;migration-&gt;current()</span></code> to work out which migrations should be run.
+The current version is found in <strong>application/config/migration.php</strong>.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#migration-file-names" id="id1">Migration file names</a></p></li>
+<li><p><a class="reference internal" href="#create-a-migration" id="id2">Create a Migration</a></p></li>
+<li><p><a class="reference internal" href="#usage-example" id="id3">Usage Example</a></p></li>
+<li><p><a class="reference internal" href="#migration-preferences" id="id4">Migration Preferences</a></p></li>
+<li><p><a class="reference internal" href="#class-reference" id="id5">Class Reference</a></p></li>
+</ul>
+</div>
+<div class="custom-index container"></div><div class="section" id="migration-file-names">
+<h2><a class="toc-backref" href="#id1">Migration file names</a><a class="headerlink" href="#migration-file-names" title="Permalink to this headline">¶</a></h2>
+<p>Each Migration is run in numeric order forward or backwards depending on the
+method taken. Two numbering styles are available:</p>
+<ul class="simple">
+<li><p><strong>Sequential:</strong> each migration is numbered in sequence, starting with <strong>001</strong>.
+Each number must be three digits, and there must not be any gaps in the
+sequence. (This was the numbering scheme prior to CodeIgniter 3.0.)</p></li>
+<li><p><strong>Timestamp:</strong> each migration is numbered using the timestamp when the migration
+was created, in <strong>YYYYMMDDHHIISS</strong> format (e.g. <strong>20121031100537</strong>). This
+helps prevent numbering conflicts when working in a team environment, and is
+the preferred scheme in CodeIgniter 3.0 and later.</p></li>
+</ul>
+<p>The desired style may be selected using the <code class="docutils literal notranslate"><span class="pre">$config['migration_type']</span></code>
+setting in your <em>application/config/migration.php</em> file.</p>
+<p>Regardless of which numbering style you choose to use, prefix your migration
+files with the migration number followed by an underscore and a descriptive
+name for the migration. For example:</p>
+<ul class="simple">
+<li><p>001_add_blog.php (sequential numbering)</p></li>
+<li><p>20121031100537_add_blog.php (timestamp numbering)</p></li>
+</ul>
+</div>
+<div class="section" id="create-a-migration">
+<h2><a class="toc-backref" href="#id2">Create a Migration</a><a class="headerlink" href="#create-a-migration" title="Permalink to this headline">¶</a></h2>
+<p>This will be the first migration for a new site which has a blog. All
+migrations go in the <strong>application/migrations/</strong> directory and have names such
+as <em>20121031100537_add_blog.php</em>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+
+defined(&#39;BASEPATH&#39;) OR exit(&#39;No direct script access allowed&#39;);
+
+class Migration_Add_blog extends CI_Migration {
+
+        public function up()
+        {
+                $this-&gt;dbforge-&gt;add_field(array(
+                        &#39;blog_id&#39; =&gt; array(
+                                &#39;type&#39; =&gt; &#39;INT&#39;,
+                                &#39;constraint&#39; =&gt; 5,
+                                &#39;unsigned&#39; =&gt; TRUE,
+                                &#39;auto_increment&#39; =&gt; TRUE
+                        ),
+                        &#39;blog_title&#39; =&gt; array(
+                                &#39;type&#39; =&gt; &#39;VARCHAR&#39;,
+                                &#39;constraint&#39; =&gt; &#39;100&#39;,
+                        ),
+                        &#39;blog_description&#39; =&gt; array(
+                                &#39;type&#39; =&gt; &#39;TEXT&#39;,
+                                &#39;null&#39; =&gt; TRUE,
+                        ),
+                ));
+                $this-&gt;dbforge-&gt;add_key(&#39;blog_id&#39;, TRUE);
+                $this-&gt;dbforge-&gt;create_table(&#39;blog&#39;);
+        }
+
+        public function down()
+        {
+                $this-&gt;dbforge-&gt;drop_table(&#39;blog&#39;);
+        }
+}
+</pre></div>
+</div>
+<p>Then in <strong>application/config/migration.php</strong> set <code class="docutils literal notranslate"><span class="pre">$config['migration_version']</span> <span class="pre">=</span> <span class="pre">20121031100537;</span></code>.</p>
+</div>
+<div class="section" id="usage-example">
+<h2><a class="toc-backref" href="#id3">Usage Example</a><a class="headerlink" href="#usage-example" title="Permalink to this headline">¶</a></h2>
+<p>In this example some simple code is placed in <strong>application/controllers/Migrate.php</strong>
+to update the schema.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?php
+
+class Migrate extends CI_Controller
+{
+
+        public function index()
+        {
+                $this-&gt;load-&gt;library(&#39;migration&#39;);
+
+                if ($this-&gt;migration-&gt;current() === FALSE)
+                {
+                        show_error($this-&gt;migration-&gt;error_string());
+                }
+        }
+
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="migration-preferences">
+<h2><a class="toc-backref" href="#id4">Migration Preferences</a><a class="headerlink" href="#migration-preferences" title="Permalink to this headline">¶</a></h2>
+<p>The following is a table of all the config options for migrations.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Preference</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>migration_enabled</strong></p></td>
+<td><p>FALSE</p></td>
+<td><p>TRUE / FALSE</p></td>
+<td><p>Enable or disable migrations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>migration_path</strong></p></td>
+<td><p>APPPATH.’migrations/’</p></td>
+<td><p>None</p></td>
+<td><p>The path to your migrations folder.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>migration_version</strong></p></td>
+<td><p>0</p></td>
+<td><p>None</p></td>
+<td><p>The current version your database should use.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>migration_table</strong></p></td>
+<td><p>migrations</p></td>
+<td><p>None</p></td>
+<td><p>The table name for storing the schema
+version number.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>migration_auto_latest</strong></p></td>
+<td><p>FALSE</p></td>
+<td><p>TRUE / FALSE</p></td>
+<td><p>Enable or disable automatically
+running migrations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>migration_type</strong></p></td>
+<td><p>‘timestamp’</p></td>
+<td><p>‘timestamp’ / ‘sequential’</p></td>
+<td><p>The type of numeric identifier used to name
+migration files.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-reference">
+<h2><a class="toc-backref" href="#id5">Class Reference</a><a class="headerlink" href="#class-reference" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Migrations Class</a><ul>
+<li><a class="reference internal" href="#migration-file-names">Migration file names</a></li>
+<li><a class="reference internal" href="#create-a-migration">Create a Migration</a></li>
+<li><a class="reference internal" href="#usage-example">Usage Example</a></li>
+<li><a class="reference internal" href="#migration-preferences">Migration Preferences</a></li>
+<li><a class="reference internal" href="#class-reference">Class Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/libraries/migration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

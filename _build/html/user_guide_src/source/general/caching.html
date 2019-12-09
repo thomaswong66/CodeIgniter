@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Web Page Caching &#8212; Codeigniter 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="web-page-caching">
+<h1>Web Page Caching<a class="headerlink" href="#web-page-caching" title="Permalink to this headline">¶</a></h1>
+<p>CodeIgniter lets you cache your pages in order to achieve maximum
+performance.</p>
+<p>Although CodeIgniter is quite fast, the amount of dynamic information
+you display in your pages will correlate directly to the server
+resources, memory, and processing cycles utilized, which affect your
+page load speeds. By caching your pages, since they are saved in their
+fully rendered state, you can achieve performance that nears that of
+static web pages.</p>
+<div class="section" id="how-does-caching-work">
+<h2>How Does Caching Work?<a class="headerlink" href="#how-does-caching-work" title="Permalink to this headline">¶</a></h2>
+<p>Caching can be enabled on a per-page basis, and you can set the length
+of time that a page should remain cached before being refreshed. When a
+page is loaded for the first time, the cache file will be written to
+your application/cache folder. On subsequent page loads the cache file
+will be retrieved and sent to the requesting user’s browser. If it has
+expired, it will be deleted and refreshed before being sent to the
+browser.</p>
+</div>
+<div class="section" id="enabling-caching">
+<h2>Enabling Caching<a class="headerlink" href="#enabling-caching" title="Permalink to this headline">¶</a></h2>
+<p>To enable caching, put the following tag in any of your controller
+methods:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$this-&gt;output-&gt;cache($n);
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">$n</span></code> is the number of <strong>minutes</strong> you wish the page to remain
+cached between refreshes.</p>
+<p>The above tag can go anywhere within a method. It is not affected by
+the order that it appears, so place it wherever it seems most logical to
+you. Once the tag is in place, your pages will begin being cached.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Because of the way CodeIgniter stores content for output,
+caching will only work if you are generating display for your
+controller with a <a class="reference internal" href="views.html"><span class="doc">view</span></a>.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If you change configuration options that might affect
+your output, you have to manually delete your cache files.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before the cache files can be written you must set the file
+permissions on your <em>application/cache/</em> directory such that
+it is writable.</p>
+</div>
+</div>
+<div class="section" id="deleting-caches">
+<h2>Deleting Caches<a class="headerlink" href="#deleting-caches" title="Permalink to this headline">¶</a></h2>
+<p>If you no longer wish to cache a file you can remove the caching tag and
+it will no longer be refreshed when it expires.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Removing the tag will not delete the cache immediately. It will
+have to expire normally.</p>
+</div>
+<p>If you need to manually delete the cache, you can use the <code class="docutils literal notranslate"><span class="pre">delete_cache()</span></code>
+method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// Deletes cache for the currently requested URI
+$this-&gt;output-&gt;delete_cache();
+
+// Deletes cache for /foo/bar
+$this-&gt;output-&gt;delete_cache(&#39;/foo/bar&#39;);
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Web Page Caching</a><ul>
+<li><a class="reference internal" href="#how-does-caching-work">How Does Caching Work?</a></li>
+<li><a class="reference internal" href="#enabling-caching">Enabling Caching</a></li>
+<li><a class="reference internal" href="#deleting-caches">Deleting Caches</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/user_guide_src/source/general/caching.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Codeigniter 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Thomas Wong, Sukh Khera, Evan Sundin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>
